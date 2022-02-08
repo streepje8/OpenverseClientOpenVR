@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6ed99d7514b8ae7408099ea26f185e7b, type: 3}
+  m_Name: OpenverseSettings
+  m_EditorClassIdentifier: 
+  isLoggedIn: 0
+  startupJoinIP: 127.0.0.1
+  port: 7777
+  clientPrefab: {fileID: 4889869699120193118, guid: 47ad1a661ca54584db4b00b8a90402aa, type: 3}
+  playerPrefab: {fileID: 2213935092232393899, guid: ee0ad5c617f7118438ede5c1ee993b90, type: 3}
+  localPlayerPrefab: {fileID: 38183963776300793, guid: ea6ff22e2ba294a4eb0acba420669e9e, type: 3}
