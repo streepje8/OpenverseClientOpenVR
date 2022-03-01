@@ -68,6 +68,7 @@ public class ScriptGenerator : EditorWindow
         string variableTypeCapitalized = variableType.Substring(0, 1).ToUpper() + variableType.Substring(1);
         StringBuilder builder = new StringBuilder();
         builder.AppendLine("using System;");
+        builder.AppendLine("using UnityEngine;");
         builder.AppendLine("namespace Openverse.Variables");
         builder.AppendLine("{");
         builder.AppendLine("    [Serializable]");
@@ -85,6 +86,7 @@ public class ScriptGenerator : EditorWindow
         builder.AppendLine("        public " + variableType + " Value");
         builder.AppendLine("        {");
         builder.AppendLine("            get { return UseConstant ? ConstantValue : Variable.Value; }");
+        builder.AppendLine("            set { if (UseConstant) { ConstantValue = value; } else { Variable.Value = value; } }    ");
         builder.AppendLine("        }");
         builder.AppendLine("        public static implicit operator " + variableType + "(" + variableTypeCapitalized + "Reference reference)");
         builder.AppendLine("        {");
