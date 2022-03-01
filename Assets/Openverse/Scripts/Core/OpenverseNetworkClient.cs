@@ -1,3 +1,4 @@
+using Openverse.Events;
 using RiptideNetworking;
 using RiptideNetworking.Utils;
 using System;
@@ -10,6 +11,10 @@ public class OpenverseNetworkClient : Singleton<OpenverseNetworkClient>
 {
     public Client Client { get; private set; }
     public OpenverseClientSettings settings;
+    public GameEvent ConnectedEvent;
+    public GameEvent ConnectionFailedEvent;
+    public GameEvent OtherClientDisconnectedEvent;
+    public GameEvent DisconnectedEvent;
 
     private void Awake()
     {
@@ -56,23 +61,25 @@ public class OpenverseNetworkClient : Singleton<OpenverseNetworkClient>
             }
         }
         Client.Send(message);
+        ConnectedEvent.Raise();
         Debug.Log("Waiting for server to supply metaverse world...");
         //possibility to start a timer that suggests a disconnect after 60 seconds
     }
 
     private void FailedToConnect(object sender, EventArgs e)
     {
-        //UIManager.Singleton.BackToMain();
+        ConnectionFailedEvent.Raise();
     }
 
     private void PlayerLeft(object sender, ClientDisconnectedEventArgs e)
     {
+        OtherClientDisconnectedEvent.Raise();
         Destroy(OpenversePlayer.list[e.Id].gameObject);
     }
 
     private void DidDisconnect(object sender, EventArgs e)
     {
-        //UIManager.Singleton.BackToMain();
+        DisconnectedEvent.Raise();
 
         foreach (OpenversePlayer player in OpenversePlayer.list.Values)
             Destroy(player.gameObject);

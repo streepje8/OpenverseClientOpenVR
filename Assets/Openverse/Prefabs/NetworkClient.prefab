@@ -44,3 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   settings: {fileID: 11400000, guid: 1104d5af3a01951418364211f0b6c233, type: 2}
+  ConnectedEvent: {fileID: 11400000, guid: 09b0152196130e040a684149c6e1b14d, type: 2}
+  ConnectionFailedEvent: {fileID: 11400000, guid: 01174b87432924443a0325feb0790894, type: 2}
+  OtherClientDisconnectedEvent: {fileID: 11400000, guid: 870f799421ce63740a6ac626b4f0990b, type: 2}
+  DisconnectedEvent: {fileID: 11400000, guid: 326ec210cb5dbc8459b03a19898a384c, type: 2}
