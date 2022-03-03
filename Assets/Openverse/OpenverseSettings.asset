@@ -18,3 +18,4 @@ MonoBehaviour:
   clientPrefab: {fileID: 4889869699120193118, guid: 47ad1a661ca54584db4b00b8a90402aa, type: 3}
   playerPrefab: {fileID: 2213935092232393899, guid: ee0ad5c617f7118438ede5c1ee993b90, type: 3}
   localPlayerPrefab: {fileID: 38183963776300793, guid: ea6ff22e2ba294a4eb0acba420669e9e, type: 3}
+  onVirtualWorldStartEvent: {fileID: 11400000, guid: 520075560a2c7c743938859e1ff1f66c, type: 2}

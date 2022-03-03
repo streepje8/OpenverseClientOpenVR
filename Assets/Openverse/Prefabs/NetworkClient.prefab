@@ -48,3 +48,6 @@ MonoBehaviour:
   ConnectionFailedEvent: {fileID: 11400000, guid: 01174b87432924443a0325feb0790894, type: 2}
   OtherClientDisconnectedEvent: {fileID: 11400000, guid: 870f799421ce63740a6ac626b4f0990b, type: 2}
   DisconnectedEvent: {fileID: 11400000, guid: 326ec210cb5dbc8459b03a19898a384c, type: 2}
+  ConnectionStartEvent: {fileID: 11400000, guid: adaf01294cd53ab4897d5abd35e9f0ab, type: 2}
+  DownloadStartEvent: {fileID: 11400000, guid: 869260bc4d817ec4e94e34f1a8cf6ed2, type: 2}
+  DownloadEndEvent: {fileID: 11400000, guid: 4e7882a6e168d054b937f711b4c0a680, type: 2}

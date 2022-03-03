@@ -6,7 +6,9 @@ public class NetworkingCommunications : MonoBehaviour
 {
     public enum ServerToClientId : ushort
     {
-        spawnPlayer = 1,
+        downloadWorld = 1,
+        openWorld,
+        spawnPlayer,
         playerLocation
     }
     public enum ClientToServerId : ushort

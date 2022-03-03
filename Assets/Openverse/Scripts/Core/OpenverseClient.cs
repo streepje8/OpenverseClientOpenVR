@@ -1,10 +1,13 @@
 using RiptideNetworking.Utils;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class OpenverseClient : MonoBehaviour
+public class OpenverseClient : Singleton<OpenverseClient>
 {
     public OpenverseClientSettings settings;
 
@@ -27,6 +30,9 @@ public class OpenverseClient : MonoBehaviour
     void Awake()
     {
         DontDestroyOnLoad(this.gameObject);
+        Instance = this;
+
+
         //Connect to the server in settings.startupJoinIP and open it
         if(settings.isLoggedIn || settings.isGuestUser) { 
             OpenverseNetworkClient client = Instantiate(settings.clientPrefab).GetComponent<OpenverseNetworkClient>();
@@ -34,5 +40,74 @@ public class OpenverseClient : MonoBehaviour
             client.Connect(settings.startupJoinIP, settings.port);
             DontDestroyOnLoad(client);
         }
+    }
+
+    public void openWorld(List<string> files)
+    {
+        OpenverseNetworkClient.Instance.DownloadEndEvent?.Raise();
+        AssetBundle sceneBundle = null;
+        AssetBundle sceneAssets = null;
+        AssetBundle clientAssets = null;
+        foreach (string file in files)
+        {
+            var loadedAssetBundle = AssetBundle.LoadFromFile(file);
+            if (loadedAssetBundle == null)
+            {
+                Debug.Log("Failed to load AssetBundle: " + Path.GetFileNameWithoutExtension(file));
+                return;
+            }
+
+            if (Path.GetFileNameWithoutExtension(file).Equals("clientassets", StringComparison.OrdinalIgnoreCase))
+            {
+                clientAssets = loadedAssetBundle;
+            }
+
+            if (Path.GetFileNameWithoutExtension(file).Equals("clientscene", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneBundle = loadedAssetBundle;
+            }
+            if (Path.GetFileNameWithoutExtension(file).Equals("OpenverseBuilds", StringComparison.OrdinalIgnoreCase))
+            {
+                sceneAssets = loadedAssetBundle;
+            }
+        }
+        StartCoroutine(EnterOpenverseWorld(sceneBundle,clientAssets, sceneAssets));
+    }
+
+    public void downloadStart()
+    {
+        OpenverseNetworkClient.Instance.DownloadStartEvent?.Raise();
+    }
+
+    IEnumerator EnterOpenverseWorld(AssetBundle sceneBundle, AssetBundle clientAssets, AssetBundle sceneAssets)
+    {
+        AsyncOperation asyncLoad = clientAssets.LoadAllAssetsAsync();
+        
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        asyncLoad = sceneAssets.LoadAllAssetsAsync();
+        
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+
+        string scenePath = sceneBundle.GetAllScenePaths()[0];
+        asyncLoad = SceneManager.LoadSceneAsync(scenePath);
+        while (!asyncLoad.isDone)
+        {
+            yield return null;
+        }
+        
+        SceneManager.SetActiveScene(SceneManager.GetSceneByPath(scenePath));
+
+
+        clientAssets.Unload(false);
+        sceneAssets.Unload(false);
+        sceneBundle.Unload(false);
+        settings.onVirtualWorldStartEvent?.Raise();
     }
 }
