@@ -9,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 public class OpenverseClient : Singleton<OpenverseClient>
 {
+    public VirtualPlayer player;
     public OpenverseClientSettings settings;
 
     public void OnValidate()
@@ -27,7 +28,7 @@ public class OpenverseClient : Singleton<OpenverseClient>
 #endif
     }
 
-    void Awake()
+    void Start()
     {
         DontDestroyOnLoad(this.gameObject);
         Instance = this;
@@ -43,7 +44,7 @@ public class OpenverseClient : Singleton<OpenverseClient>
     }
 
     public void openWorld(List<string> files)
-    {
+    { 
         OpenverseNetworkClient.Instance.DownloadEndEvent?.Raise();
         AssetBundle sceneBundle = null;
         AssetBundle sceneAssets = null;
@@ -101,7 +102,7 @@ public class OpenverseClient : Singleton<OpenverseClient>
         {
             yield return null;
         }
-        
+
         SceneManager.SetActiveScene(SceneManager.GetSceneByPath(scenePath));
 
 

@@ -49,6 +49,7 @@ public class OpenverseNetworkClient : Singleton<OpenverseNetworkClient>
     public void Connect(string ip, ushort port)
     {
         ConnectionStartEvent?.Raise();
+        Debug.Log("ConnectionEvent");
         Client.Connect($"{ip}:{port}");
     }
 
@@ -65,7 +66,7 @@ public class OpenverseNetworkClient : Singleton<OpenverseNetworkClient>
             }
         }
         Client.Send(message);
-        ConnectedEvent.Raise();
+        ConnectedEvent?.Raise();
         Debug.Log("Waiting for server to supply metaverse world...");
         //possibility to start a timer that suggests a disconnect after 60 seconds
     }
