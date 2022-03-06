@@ -1,3 +1,4 @@
+using Openverse.Variables;
 using RiptideNetworking.Utils;
 using System;
 using System.Collections;
@@ -10,7 +11,10 @@ using UnityEngine.SceneManagement;
 public class OpenverseClient : Singleton<OpenverseClient>
 {
     public VirtualPlayer player;
+    public StringReference nextServer;
     public OpenverseClientSettings settings;
+
+    private bool goToHome = true;
 
     public void OnValidate()
     {
@@ -32,15 +36,19 @@ public class OpenverseClient : Singleton<OpenverseClient>
     {
         DontDestroyOnLoad(this.gameObject);
         Instance = this;
+        connectToNextServer();
+    }
 
-
-        //Connect to the server in settings.startupJoinIP and open it
-        if(settings.isLoggedIn || settings.isGuestUser) { 
+    public void connectToNextServer()
+    {
+        if (settings.isLoggedIn || settings.isGuestUser)
+        {
             OpenverseNetworkClient client = Instantiate(settings.clientPrefab).GetComponent<OpenverseNetworkClient>();
             client.settings = settings;
-            client.Connect(settings.startupJoinIP, settings.port);
+            client.Connect(goToHome ? settings.startupJoinIP : nextServer, settings.port);
             DontDestroyOnLoad(client);
         }
+        goToHome = false;
     }
 
     public void openWorld(List<string> files)
