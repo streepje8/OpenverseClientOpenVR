@@ -58,24 +58,27 @@ namespace Sly
             }
             foreach (Scene scene in scenes)
             {
-                GameObject[] rootObjectsInScene = scene.GetRootGameObjects();
-                for (int i = 0; i < rootObjectsInScene.Length; i++)
+                if (scene.IsValid())
                 {
-                    SlyScriptComponent[] allComponents = rootObjectsInScene[i].GetComponentsInChildren<SlyScriptComponent>(true);
-                    for (int j = 0; j < allComponents.Length; j++)
+                    GameObject[] rootObjectsInScene = scene.GetRootGameObjects();
+                    for (int i = 0; i < rootObjectsInScene.Length; i++)
                     {
-                        SlyScriptComponent ssc = allComponents[j];
-                        if (ssc.Script != null)
+                        SlyScriptComponent[] allComponents = rootObjectsInScene[i].GetComponentsInChildren<SlyScriptComponent>(true);
+                        for (int j = 0; j < allComponents.Length; j++)
                         {
-                            if (ssc.Script != self)
+                            SlyScriptComponent ssc = allComponents[j];
+                            if (ssc.Script != null)
                             {
-                                ssc.Script.Compile();
+                                if (ssc.Script != self)
+                                {
+                                    ssc.Script.Compile();
+                                }
+                                if (ssc.instance == null)
+                                {
+                                    ssc.instance = new SlyInstance(ssc.Script.compiledClass);
+                                }
+                                ssc.instance.recompile(ssc.Script.compiledClass);
                             }
-                            if (ssc.instance == null)
-                            {
-                                ssc.instance = new SlyInstance(ssc.Script.compiledClass);
-                            }
-                            ssc.instance.recompile(ssc.Script.compiledClass);
                         }
                     }
                 }
