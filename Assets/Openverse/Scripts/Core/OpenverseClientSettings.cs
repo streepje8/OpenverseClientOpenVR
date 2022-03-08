@@ -1,3 +1,4 @@
+using Openverse.Events;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -16,4 +17,5 @@ public class OpenverseClientSettings : ScriptableObject
     public GameObject clientPrefab;
     public GameObject playerPrefab;
     public GameObject localPlayerPrefab;
+    public GameEvent onVirtualWorldStartEvent;
 }
