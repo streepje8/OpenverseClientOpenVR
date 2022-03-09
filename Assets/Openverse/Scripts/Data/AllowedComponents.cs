@@ -25,6 +25,25 @@ public class AllowedComponents : MonoBehaviour
         typeof(Rigidbody)
     };
 
+    public static List<Type> allowedTypesList = new List<Type>()
+    {
+        typeof(Transform),
+        typeof(MeshRenderer),
+        typeof(MeshFilter),
+        typeof(MeshCollider),
+        typeof(BoxCollider),
+        typeof(SphereCollider),
+        typeof(CapsuleCollider),
+        typeof(TerrainCollider),
+        typeof(Light),
+        typeof(PostProcessVolume),
+        typeof(PostProcessLayer),
+        typeof(PostProcessProfile),
+        typeof(PostProcessEffectSettings),
+        typeof(ParticleSystem),
+        typeof(Rigidbody)
+    };
+
     public static void ScanAndRemoveInvalidScripts(GameObject go)
     {
         for(int i = 0; i < go.transform.childCount; i++)

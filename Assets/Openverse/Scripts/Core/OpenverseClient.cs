@@ -1,4 +1,5 @@
 using Openverse.Variables;
+using RiptideNetworking;
 using RiptideNetworking.Utils;
 using System;
 using System.Collections;
@@ -7,12 +8,14 @@ using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static NetworkingCommunications;
 
 public class OpenverseClient : Singleton<OpenverseClient>
 {
     public VirtualPlayer player;
     public StringReference nextServer;
     public OpenverseClientSettings settings;
+    public static Dictionary<Guid, NetworkedObject> NetworkedObjects = new Dictionary<Guid, NetworkedObject>();
 
     private bool goToHome = true;
 
@@ -83,6 +86,64 @@ public class OpenverseClient : Singleton<OpenverseClient>
         StartCoroutine(EnterOpenverseWorld(sceneBundle,clientAssets, sceneAssets));
     }
 
+    public void spawnNetworkedObject(Message message)
+    {
+        Guid id = Guid.Parse(message.GetString());
+        NetworkedObject obj = Instantiate(new GameObject(),message.GetVector3(),message.GetQuaternion()).AddComponent<NetworkedObject>();
+        obj.gameObject.name = "(Networked Object) " + message.GetString();
+        for(int i = 0; i < message.GetInt(); i++)
+        {
+            Type type = AllowedComponents.allowedTypesList[message.GetInt()];
+            Component c;
+            if(obj.gameObject.GetComponent(type) != null)
+            {
+                c = obj.gameObject.GetComponent(type);
+            } else
+            {
+                c = obj.gameObject.AddComponent(type);
+            }
+            int x = 0;
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            while(x < 500 && message.GetBool())
+            {
+                string varname = message.GetString();
+                switch(message.GetUShort())
+                {
+                    case 0:
+                        properties.Add(varname, message.GetString());
+                        break;
+                    case 1:
+                        properties.Add(varname, message.GetFloat());
+                        break;
+                    case 2:
+                        properties.Add(varname, message.GetInt());
+                        break;
+                    case 3:
+                        properties.Add(varname, message.GetBool());
+                        break;
+                    case 4:
+                        properties.Add(varname, message.GetVector2());
+                        break;
+                    case 5:
+                        properties.Add(varname, message.GetVector3());
+                        break;
+                    case 6:
+                        properties.Add(varname, message.GetQuaternion());
+                        break;
+                }
+                x++;
+            }
+            foreach(var prop in c.GetType().GetProperties())
+            {
+                if(properties.ContainsKey(prop.Name))
+                {
+                    prop.SetValue(c, properties[prop.Name]);
+                }
+            }
+        }
+        NetworkedObjects.Add(id, obj);
+    }
+
     public void downloadStart()
     {
         OpenverseNetworkClient.Instance.DownloadStartEvent?.Raise();
@@ -123,5 +184,6 @@ public class OpenverseClient : Singleton<OpenverseClient>
         sceneAssets.Unload(false);
         sceneBundle.Unload(false);
         settings.onVirtualWorldStartEvent?.Raise();
+        OpenverseNetworkClient.Instance.Client.Send(Message.Create(MessageSendMode.reliable,ClientToServerId.playerReady));
     }
 }

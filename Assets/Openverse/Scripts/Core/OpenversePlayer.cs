@@ -58,6 +58,12 @@ public class OpenversePlayer : MonoBehaviour
             player.Move(message.GetVector3(), message.GetVector3());
     }
 
+    [MessageHandler((ushort)ServerToClientId.spawnObject)]
+    public static void SpawnObject(Message message)
+    {
+        OpenverseClient.Instance.spawnNetworkedObject(message);
+    }
+
     private static byte[] currentFile = new byte[0];
     private static string currentFileName = "";
     private static bool fileHasContents = false;
