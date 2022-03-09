@@ -106,7 +106,6 @@ public class OpenverseClient : Singleton<OpenverseClient>
 
         string scenePath = sceneBundle.GetAllScenePaths()[0];
         asyncLoad = SceneManager.LoadSceneAsync(scenePath);
-        /*
         asyncLoad.completed += (AsyncOperation o) =>
         {
             foreach (GameObject go in SceneManager.GetSceneByPath(scenePath).GetRootGameObjects())
@@ -114,7 +113,6 @@ public class OpenverseClient : Singleton<OpenverseClient>
                 AllowedComponents.ScanAndRemoveInvalidScripts(go);
             }
         };
-        */
         while (!asyncLoad.isDone)
         {
 

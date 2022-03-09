@@ -13,6 +13,7 @@ public class NetworkingCommunications : MonoBehaviour
     }
     public enum ClientToServerId : ushort
     {
-        playerName = 1
+        playerName = 1,
+        vrPositions
     }
 }

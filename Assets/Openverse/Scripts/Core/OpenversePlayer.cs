@@ -28,6 +28,21 @@ public class OpenversePlayer : MonoBehaviour
         list.Add(player.id, player);
     }
 
+    public static void SendVRPositions(VirtualPlayer virtualPlayer)
+    {
+        if (OpenverseNetworkClient.Instance.Client.IsConnected)
+        {
+            Message message = Message.Create(MessageSendMode.unreliable, ClientToServerId.vrPositions);
+            message.Add(virtualPlayer.head.transform.localPosition);
+            message.Add(virtualPlayer.head.transform.localRotation);
+            message.Add(virtualPlayer.handLeft.transform.localPosition);
+            message.Add(virtualPlayer.handLeft.transform.localRotation);
+            message.Add(virtualPlayer.handRight.transform.localPosition);
+            message.Add(virtualPlayer.handRight.transform.localRotation);
+            OpenverseNetworkClient.Instance.Client.Send(message);
+        }
+    }
+
     #region Messages
     [MessageHandler((ushort)ServerToClientId.spawnPlayer)]
     private static void SpawnPlayer(Message message)
