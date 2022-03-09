@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: ee2351d2f1779c0459c7926b5eb4b341, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -173,6 +173,10 @@ PrefabInstance:
     - target: {fileID: 71224032103311581, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1936412786450585464, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3131788456916884784, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
       propertyPath: m_Enabled
@@ -282,63 +286,15 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
---- !u!1 &684121970 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7718698621408370296, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
+--- !u!114 &684121971 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1880639358085705158, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
   m_PrefabInstance: {fileID: 491248560}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &684121971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684121970}
+  m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: df4e4fa8a6d54e54b81d49fb9184434a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 0
-  username: 
---- !u!114 &684121972
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684121970}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 22830722c0bc51c4280bcfecc4884171, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Event: {fileID: 11400000, guid: 520075560a2c7c743938859e1ff1f66c, type: 2}
-  Response:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 684121971}
-        m_TargetAssemblyTypeName: VirtualPlayer, Assembly-CSharp
-        m_MethodName: OnWorldStart
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &684121973
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684121970}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b36dcfc50b0239345be127d906fe1193, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &916155604
