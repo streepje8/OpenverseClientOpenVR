@@ -10,38 +10,19 @@ using static NetworkingCommunications;
 
 public class OpenversePlayer : MonoBehaviour
 {
-    public static Dictionary<ushort, OpenversePlayer> list = new Dictionary<ushort, OpenversePlayer>();
-
-    [SerializeField] private ushort id;
-    [SerializeField] private string username;
-
-    public void Move(Vector3 newPosition, Vector3 forward)
-    {
-        transform.position = newPosition;
-
-        if (id != OpenverseNetworkClient.Instance.Client.Id) // Don't overwrite local player's forward direction to avoid noticeable rotational snapping
-            transform.forward = forward;
-    }
-
-    private void OnDestroy()
-    {
-        list.Remove(id);
-    }
+    public static Dictionary<ushort, VirtualPlayer> list = new Dictionary<ushort, VirtualPlayer>();
 
     public static void Spawn(ushort id, string username, Vector3 position)
     {
-        OpenversePlayer player;
-        if (id == OpenverseNetworkClient.Instance.Client.Id)
+        VirtualPlayer player;
+        if (!(id == OpenverseNetworkClient.Instance.Client.Id))
         {
-            player = Instantiate(OpenverseNetworkClient.Instance.settings.localPlayerPrefab, position, Quaternion.identity).GetComponent<OpenversePlayer>();
-            player.name = $"[LOCAL]Player {id} ({username})";
-        }
-        else
+            player = Instantiate(OpenverseNetworkClient.Instance.settings.playerPrefab, position, Quaternion.identity).GetComponent<VirtualPlayer>();
+            player.name = $"VirtualPlayer {id} ({username})";
+        } else
         {
-            player = Instantiate(OpenverseNetworkClient.Instance.settings.playerPrefab, position, Quaternion.identity).GetComponent<OpenversePlayer>();
-            player.name = $"Player {id} ({username})";
+            player = OpenverseClient.Instance.player.GetComponent<VirtualPlayer>();
         }
-        
         player.id = id;
         player.username = username;
         list.Add(player.id, player);
@@ -58,7 +39,7 @@ public class OpenversePlayer : MonoBehaviour
     private static void PlayerMovement(Message message)
     {
         ushort playerId = message.GetUShort();
-        if (list.TryGetValue(playerId, out OpenversePlayer player))
+        if (list.TryGetValue(playerId, out VirtualPlayer player))
             player.Move(message.GetVector3(), message.GetVector3());
     }
 

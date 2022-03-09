@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class VirtualPlayer : MonoBehaviour
 {
+    [SerializeField] public ushort id;
+    [SerializeField] public string username;
 
     private void Awake()
     {
@@ -19,4 +21,19 @@ public class VirtualPlayer : MonoBehaviour
             transform.position = spawn.transform.position;
         }
     }
+    
+
+    public void Move(Vector3 newPosition, Vector3 forward)
+    {
+        //transform.position = newPosition;
+
+        //if (id != OpenverseNetworkClient.Instance.Client.Id) // Don't overwrite local player's forward direction to avoid noticeable rotational snapping
+            //transform.forward = forward;
+    }
+
+    private void OnDestroy()
+    {
+        OpenversePlayer.list.Remove(id);
+    }
+
 }

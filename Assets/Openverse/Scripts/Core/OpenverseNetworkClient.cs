@@ -86,7 +86,7 @@ public class OpenverseNetworkClient : Singleton<OpenverseNetworkClient>
     {
         DisconnectedEvent?.Raise();
 
-        foreach (OpenversePlayer player in OpenversePlayer.list.Values)
+        foreach (VirtualPlayer player in OpenversePlayer.list.Values)
             Destroy(player.gameObject);
     }
 }

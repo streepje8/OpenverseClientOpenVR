@@ -183,6 +183,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3131788457212950165, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3131788457212950165, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
       propertyPath: m_BackGroundColor.b
       value: 0.107
       objectReference: {fileID: 0}
@@ -295,6 +299,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df4e4fa8a6d54e54b81d49fb9184434a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  id: 0
+  username: 
 --- !u!114 &684121972
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -323,6 +329,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &684121973
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 684121970}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b36dcfc50b0239345be127d906fe1193, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &916155604
 GameObject:
   m_ObjectHideFlags: 0
@@ -571,6 +589,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 684121971}
+  nextServer:
+    UseConstant: 1
+    ConstantValue: 
+    Variable: {fileID: 0}
   settings: {fileID: 11400000, guid: 1104d5af3a01951418364211f0b6c233, type: 2}
 --- !u!4 &1361250725
 Transform:
