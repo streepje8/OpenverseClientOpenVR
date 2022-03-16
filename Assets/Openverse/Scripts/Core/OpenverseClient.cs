@@ -16,6 +16,7 @@ public class OpenverseClient : Singleton<OpenverseClient>
     public StringReference nextServer;
     public OpenverseClientSettings settings;
     public static Dictionary<Guid, NetworkedObject> NetworkedObjects = new Dictionary<Guid, NetworkedObject>();
+    public UnityEngine.Object[] allClientAssets;
 
     private bool goToHome = true;
 
@@ -89,55 +90,82 @@ public class OpenverseClient : Singleton<OpenverseClient>
     public void spawnNetworkedObject(Message message)
     {
         Guid id = Guid.Parse(message.GetString());
-        NetworkedObject obj = Instantiate(new GameObject(),message.GetVector3(),message.GetQuaternion()).AddComponent<NetworkedObject>();
+        NetworkedObject obj = new GameObject().AddComponent<NetworkedObject>();
+        obj.transform.position = message.GetVector3();
+        obj.transform.rotation = message.GetQuaternion();
+        obj.transform.localScale = message.GetVector3();
         obj.gameObject.name = "(Networked Object) " + message.GetString();
-        for(int i = 0; i < message.GetInt(); i++)
+        int componentCount = message.GetInt();
+        for (int i = 0; i < componentCount; i++)
         {
-            Type type = AllowedComponents.allowedTypesList[message.GetInt()];
-            Component c;
-            if(obj.gameObject.GetComponent(type) != null)
+            int index = message.GetInt();
+            if (AllowedComponents.allowedTypesList.Count > index)
             {
-                c = obj.gameObject.GetComponent(type);
-            } else
-            {
-                c = obj.gameObject.AddComponent(type);
-            }
-            int x = 0;
-            Dictionary<string, object> properties = new Dictionary<string, object>();
-            while(x < 500 && message.GetBool())
-            {
-                string varname = message.GetString();
-                switch(message.GetUShort())
+                Type type = AllowedComponents.allowedTypesList[index];
+                Component c;
+                if (obj.gameObject.GetComponent(type) != null)
                 {
-                    case 0:
-                        properties.Add(varname, message.GetString());
-                        break;
-                    case 1:
-                        properties.Add(varname, message.GetFloat());
-                        break;
-                    case 2:
-                        properties.Add(varname, message.GetInt());
-                        break;
-                    case 3:
-                        properties.Add(varname, message.GetBool());
-                        break;
-                    case 4:
-                        properties.Add(varname, message.GetVector2());
-                        break;
-                    case 5:
-                        properties.Add(varname, message.GetVector3());
-                        break;
-                    case 6:
-                        properties.Add(varname, message.GetQuaternion());
-                        break;
+                    c = obj.gameObject.GetComponent(type);
                 }
-                x++;
-            }
-            foreach(var prop in c.GetType().GetProperties())
-            {
-                if(properties.ContainsKey(prop.Name))
+                else
                 {
-                    prop.SetValue(c, properties[prop.Name]);
+                    c = obj.gameObject.AddComponent(type);
+                }
+                int x = 0;
+                Dictionary<string, object> properties = new Dictionary<string, object>();
+                while (x < 500 && message.GetBool())
+                {
+                    string varname = message.GetString();
+                    switch (message.GetUShort())
+                    {
+                        case 0:
+                            properties.Add(varname, message.GetString());
+                            break;
+                        case 1:
+                            properties.Add(varname, message.GetFloat());
+                            break;
+                        case 2:
+                            properties.Add(varname, message.GetInt());
+                            break;
+                        case 3:
+                            properties.Add(varname, message.GetBool());
+                            break;
+                        case 4:
+                            properties.Add(varname, message.GetVector2());
+                            break;
+                        case 5:
+                            properties.Add(varname, message.GetVector3());
+                            break;
+                        case 6:
+                            properties.Add(varname, message.GetQuaternion());
+                            break;
+                        case 7:
+                            UnityEngine.Object foundAsset = null;
+                            string name = message.GetString();
+                            Debug.Log("looking for");
+                            foreach(UnityEngine.Object uobj in allClientAssets)
+                            {
+                                if(name == uobj.name)
+                                {
+                                    foundAsset = uobj;
+                                } else
+                                {
+                                }
+                            }
+                            properties.Add(varname, foundAsset);
+                            break;
+                        default:
+                            properties.Add(varname, null);
+                            break;
+                    }
+                    x++;
+                }
+                foreach (var prop in c.GetType().GetProperties())
+                {
+                    if (properties.ContainsKey(prop.Name))
+                    {
+                        prop.SetValue(c, properties[prop.Name]);
+                    }
                 }
             }
         }
@@ -180,7 +208,8 @@ public class OpenverseClient : Singleton<OpenverseClient>
             yield return null;
         }
 
-        clientAssets.Unload(false);
+        allClientAssets = clientAssets.LoadAllAssets();
+        //clientAssets.Unload(false);
         sceneAssets.Unload(false);
         sceneBundle.Unload(false);
         settings.onVirtualWorldStartEvent?.Raise();
