@@ -2,11 +2,14 @@ using RiptideNetworking;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 public class NetworkedObject : MonoBehaviour
 {
     public Guid myID;
+    private Dictionary<string, PropertyInfo> networkedProperties = new Dictionary<string, PropertyInfo>();
+    private Dictionary<string, Component> networkedComponents = new Dictionary<string, Component>();
 
     public static void Spawn(Message message)
     {
@@ -88,7 +91,7 @@ public class NetworkedObject : MonoBehaviour
                 }
 
                 //Actually asign the properties
-                foreach (var prop in c.GetType().GetProperties())
+                foreach (PropertyInfo prop in c.GetType().GetProperties())
                 {
                     if (properties.ContainsKey(prop.Name))
                     {
@@ -104,6 +107,14 @@ public class NetworkedObject : MonoBehaviour
                                 if (extracted != null)
                                     prop.SetValue(c, extracted);
                             }
+                            if (!obj.networkedProperties.ContainsKey(c.GetType().Name + "$.$" + prop.Name) && !obj.networkedComponents.ContainsKey(c.name + "$.$" + prop.Name))
+                            {
+                                obj.networkedProperties.Add(c.GetType().Name + "$.$" + prop.Name, prop);
+                                obj.networkedComponents.Add(c.GetType().Name + "$.$" + prop.Name, c);
+                            } else
+                            {
+                                Debug.LogWarning("Variable " + c.GetType().Name + "$.$" + prop.Name + " could not be synced!");
+                            }
                         }
                     }
                 }
@@ -113,6 +124,37 @@ public class NetworkedObject : MonoBehaviour
             }
         }
         OpenverseClient.Instance.AddObject(id, obj);
+    }
+
+    public void UpdateVariable(Message msg)
+    {
+        string classVarName = msg.GetString();
+        PropertyInfo prop = networkedProperties[classVarName];
+        Component comp = networkedComponents[classVarName];
+        switch(msg.GetUShort())
+        {
+            case 0:
+                prop.SetValue(comp, msg.GetString());
+                break;
+            case 1:
+                prop.SetValue(comp, msg.GetFloat());
+                break;
+            case 2:
+                prop.SetValue(comp, msg.GetInt());
+                break;
+            case 3:
+                prop.SetValue(comp, msg.GetBool());
+                break;
+            case 4:
+                prop.SetValue(comp, msg.GetVector2());
+                break;
+            case 5:
+                prop.SetValue(comp, msg.GetVector3());
+                break;
+            case 6:
+                prop.SetValue(comp, msg.GetQuaternion());
+                break;
+        }
     }
 
     private static object ExtractType(object v, Type type)

@@ -1020,6 +1020,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 0
   username: 
+  head: {fileID: 3131788457212950167}
+  handLeft: {fileID: 3131788457445542542}
+  handRight: {fileID: 3131788456916884788}
 --- !u!114 &5943643308720244589
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1055,7 +1058,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7718698621408370296}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b36dcfc50b0239345be127d906fe1193, type: 3}
   m_Name: 

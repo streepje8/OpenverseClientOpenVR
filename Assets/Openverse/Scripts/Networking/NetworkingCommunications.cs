@@ -11,7 +11,8 @@ public class NetworkingCommunications : MonoBehaviour
         spawnPlayer,
         playerLocation,
         spawnObject,
-        updateObject
+        updateObject,
+        updateVariable
     }
     public enum ClientToServerId : ushort
     {

@@ -44,6 +44,22 @@ public class OpenversePlayer : MonoBehaviour
     }
 
     #region Messages
+    [MessageHandler((ushort)ServerToClientId.updateVariable)]
+    private static void UpdateVariableOnObject(Message message)
+    {
+        //Debug.Log("Changing " + Guid.Parse(message.GetString()).ToString());
+        //Debug.Log("Out of list: " + OpenverseClient.NetworkedObjects.Keys.First().ToString());
+        Guid recieved = Guid.Parse(message.GetString());
+        if (OpenverseClient.NetworkedObjects.ContainsKey(recieved))
+        {
+            NetworkedObject obj = OpenverseClient.NetworkedObjects[recieved];
+            obj.UpdateVariable(message);
+        } else
+        {
+            Debug.LogWarning("Tried to sync gameobject with GUID " + recieved.ToString() + " but it no longer exists!");
+        }
+    }
+
     [MessageHandler((ushort)ServerToClientId.spawnPlayer)]
     private static void SpawnPlayer(Message message)
     {
