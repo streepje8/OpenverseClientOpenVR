@@ -11,16 +11,11 @@ public class NetworkedObject : MonoBehaviour
     private Dictionary<string, PropertyInfo> networkedProperties = new Dictionary<string, PropertyInfo>();
     private Dictionary<string, Component> networkedComponents = new Dictionary<string, Component>();
 
-    public static void Spawn(Message message)
+    public static void AddComponent(Message message)
     {
         Guid id = Guid.Parse(message.GetString());
-        NetworkedObject obj = new GameObject().AddComponent<NetworkedObject>();
-        obj.transform.position = message.GetVector3();
-        obj.transform.rotation = message.GetQuaternion();
-        obj.transform.localScale = message.GetVector3();
-        obj.gameObject.name = "(Networked Object) " + message.GetString();
-        int componentCount = message.GetInt();
-        for (int i = 0; i < componentCount; i++)
+        OpenverseClient.NetworkedObjects.TryGetValue(id, out NetworkedObject obj);
+        if (obj != null)
         {
             int index = message.GetInt();
             if (AllowedComponents.allowedTypesList.Count > index)
@@ -39,7 +34,7 @@ public class NetworkedObject : MonoBehaviour
                 Dictionary<string, PropertyAssignment> properties = new Dictionary<string, PropertyAssignment>();
 
                 //Parse the properties in the packet
-                while (x < 500 && message.GetBool())
+                while (x < 1000 && message.GetBool())
                 {
                     string varname = message.GetString();
                     switch (message.GetUShort())
@@ -78,7 +73,8 @@ public class NetworkedObject : MonoBehaviour
                             if (foundAsset != null)
                             {
                                 properties.Add(varname, new PropertyAssignment(OpenverseClient.Instance.LoadAsset(foundAsset), false));
-                            } else
+                            }
+                            else
                             {
                                 Debug.LogWarning("Could not find asset with name: " + name);
                             }
@@ -111,18 +107,30 @@ public class NetworkedObject : MonoBehaviour
                             {
                                 obj.networkedProperties.Add(c.GetType().Name + "$.$" + prop.Name, prop);
                                 obj.networkedComponents.Add(c.GetType().Name + "$.$" + prop.Name, c);
-                            } else
+                            }
+                            else
                             {
                                 Debug.LogWarning("Variable " + c.GetType().Name + "$.$" + prop.Name + " could not be synced!");
                             }
                         }
                     }
                 }
-            } else
+            }
+            else
             {
                 Debug.LogWarning("Component of type " + index + " was not found! Do you need to update?");
             }
         }
+    }
+
+    public static void Spawn(Message message)
+    {
+        Guid id = Guid.Parse(message.GetString());
+        NetworkedObject obj = new GameObject().AddComponent<NetworkedObject>();
+        obj.transform.position = message.GetVector3();
+        obj.transform.rotation = message.GetQuaternion();
+        obj.transform.localScale = message.GetVector3();
+        obj.gameObject.name = "(Networked Object) " + message.GetString();
         OpenverseClient.Instance.AddObject(id, obj);
     }
 

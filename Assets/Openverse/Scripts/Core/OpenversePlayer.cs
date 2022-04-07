@@ -44,6 +44,24 @@ public class OpenversePlayer : MonoBehaviour
     }
 
     #region Messages
+    [MessageHandler((ushort)ServerToClientId.addComponent)]
+    private static void AddComponentToObject(Message message)
+    {
+        NetworkedObject.AddComponent(message);
+    }
+    [MessageHandler((ushort)ServerToClientId.transformObject)]
+    private static void UpdateObjectTransform(Message message)
+    {
+        Guid recieved = Guid.Parse(message.GetString());
+        OpenverseClient.NetworkedObjects.TryGetValue(recieved, out NetworkedObject networkedObject);
+        if (networkedObject != null)
+        {
+            networkedObject.transform.position = message.GetVector3();
+            networkedObject.transform.rotation = message.GetQuaternion();
+            networkedObject.transform.localScale = message.GetVector3();
+        }
+    }
+
     [MessageHandler((ushort)ServerToClientId.updateVariable)]
     private static void UpdateVariableOnObject(Message message)
     {
