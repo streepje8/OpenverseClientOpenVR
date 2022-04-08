@@ -49,6 +49,11 @@ public class OpenversePlayer : MonoBehaviour
     {
         NetworkedObject.AddComponent(message);
     }
+    [MessageHandler((ushort)ServerToClientId.removeComponent)]
+    private static void RemoveComponentFromObject(Message message)
+    {
+        NetworkedObject.RemoveComponent(message);
+    }
     [MessageHandler((ushort)ServerToClientId.transformObject)]
     private static void UpdateObjectTransform(Message message)
     {

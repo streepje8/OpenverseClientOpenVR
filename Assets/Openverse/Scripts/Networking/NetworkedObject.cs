@@ -11,6 +11,20 @@ public class NetworkedObject : MonoBehaviour
     private Dictionary<string, PropertyInfo> networkedProperties = new Dictionary<string, PropertyInfo>();
     private Dictionary<string, Component> networkedComponents = new Dictionary<string, Component>();
 
+    public static void RemoveComponent(Message message)
+    {
+        Guid id = Guid.Parse(message.GetString());
+        OpenverseClient.NetworkedObjects.TryGetValue(id, out NetworkedObject obj);
+        if (obj != null)
+        {
+            string compType = message.GetString();
+            if (obj.GetComponent(compType) != null)
+            {
+                Destroy(obj.GetComponent(compType));
+            }
+        }
+    }
+
     public static void AddComponent(Message message)
     {
         Guid id = Guid.Parse(message.GetString());

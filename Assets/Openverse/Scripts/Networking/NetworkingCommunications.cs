@@ -14,7 +14,8 @@ public class NetworkingCommunications : MonoBehaviour
         updateObject,
         updateVariable,
         transformObject,
-        addComponent
+        addComponent,
+        removeComponent
     }
     public enum ClientToServerId : ushort
     {
