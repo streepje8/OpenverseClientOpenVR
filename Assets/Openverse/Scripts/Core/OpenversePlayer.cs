@@ -44,6 +44,20 @@ public class OpenversePlayer : MonoBehaviour
     }
 
     #region Messages
+    [MessageHandler((ushort)ServerToClientId.moveClientMoveable)]
+    private static void OnClientMoveableMoved(Message message)
+    {
+        ClientMoveable.ClientMoveables.TryGetValue(message.GetString(), out ClientMoveable moveable);
+        if (moveable != null)
+        {
+            moveable.transform.position = message.GetVector3();
+            moveable.transform.rotation = message.GetQuaternion();
+            moveable.transform.localScale = message.GetVector3();
+            moveable.lastPOS = moveable.transform.position;
+            moveable.lastRot = moveable.transform.rotation;
+            moveable.lastScale = moveable.transform.localScale;
+        }
+    }
     [MessageHandler((ushort)ServerToClientId.addComponent)]
     private static void AddComponentToObject(Message message)
     {
