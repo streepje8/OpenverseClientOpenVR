@@ -1,48 +1,58 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.UI;
-
-public class VirtualPlayer : MonoBehaviour
+//-------------------------------
+//VirtualPlayer
+//The main way of interfacing with the Openverse Player Object
+//
+//Author: streep
+//Creation Date: 12-04-2022
+//--------------------------------
+namespace Openverse.Core
 {
-    [SerializeField] public ushort id;
-    [SerializeField] public string username;
+    using Openverse.Permissions;
+    using UnityEngine;
 
-    public GameObject head;
-    public GameObject handLeft;
-    public GameObject handRight;
-
-    private void Awake()
+    public class VirtualPlayer : MonoBehaviour
     {
-        DontDestroyOnLoad(this.gameObject);
-    }
+        [SerializeField] public ushort id;
+        [SerializeField] public string username;
 
-    private void FixedUpdate()
-    {
-        OpenversePlayer.SendVRPositions(this);
-    }
+        public GameObject head;
+        public GameObject handLeft;
+        public GameObject handRight;
 
-    public void OnWorldStart()
-    {
-        GameObject spawn = GameObject.Find("WorldSpawn");
-        if (spawn != null)
+        public bool sendPositions { get; private set; } = false;
+
+        private void Awake()
         {
-            transform.position = spawn.transform.position;
+            DontDestroyOnLoad(this.gameObject);
+        }
+
+        private void FixedUpdate()
+        {
+            OpenversePlayer.SendVRPositions(this);
+        }
+
+        public void OnWorldStart()
+        {
+            GameObject spawn = GameObject.Find("WorldSpawn");
+            if (spawn != null)
+            {
+                transform.position = spawn.transform.position;
+            }
+            sendPositions = PermissionManager.Instance.GetPermission(Permission.PositionalData) == PermissionState.ALLOW ? true : false;
+        }
+
+
+        public void Move(Vector3 newPosition, Vector3 forward)
+        {
+            transform.position = newPosition;
+
+            if (id != OpenverseNetworkClient.Instance.Client.Id) // Don't overwrite local player's forward direction to avoid noticeable rotational snapping
+                transform.forward = forward;
+        }
+
+        private void OnDestroy()
+        {
+            OpenversePlayer.list.Remove(id);
         }
     }
-    
-
-    public void Move(Vector3 newPosition, Vector3 forward)
-    {
-        transform.position = newPosition;
-
-        if (id != OpenverseNetworkClient.Instance.Client.Id) // Don't overwrite local player's forward direction to avoid noticeable rotational snapping
-            transform.forward = forward;
-    }
-
-    private void OnDestroy()
-    {
-        OpenversePlayer.list.Remove(id);
-    }
-
 }

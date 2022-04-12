@@ -1,28 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class NetworkingCommunications : MonoBehaviour
+//-------------------------------
+//NetworkingCommunications
+//Stores the meanings of the packet indexes
+//
+//Author: streep
+//Creation Date: 12-04-2022
+//--------------------------------
+namespace Openverse.NetCode
 {
-    public enum ServerToClientId : ushort
+    using UnityEngine;
+    public class NetworkingCommunications : MonoBehaviour
     {
-        downloadWorld = 1,
-        openWorld,
-        spawnPlayer,
-        playerLocation,
-        spawnObject,
-        updateObject,
-        updateVariable,
-        transformObject,
-        addComponent,
-        removeComponent,
-        moveClientMoveable
-    }
-    public enum ClientToServerId : ushort
-    {
-        playerName = 1,
-        vrPositions,
-        playerReady,
-        moveClientMoveable
+        public enum ServerToClientId : ushort
+        {
+            downloadWorld = 1,
+            openWorld,
+            spawnPlayer,
+            playerLocation,
+            spawnObject,
+            updateObject,
+            updateVariable,
+            transformObject,
+            addComponent,
+            removeComponent,
+            moveClientMoveable
+        }
+        public enum ClientToServerId : ushort
+        {
+            playerName = 1,
+            vrPositions,
+            playerReady,
+            moveClientMoveable
+        }
     }
 }

@@ -1,18 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+//-------------------------------
+//PermissionManager
+//The client side handler that controls the Permissions.cs Script.
+//
+//Author: streep
+//Creation Date: 12-04-2022
+//--------------------------------
+using System;
 
-public enum PermissionState
+namespace Openverse.Permissions
 {
-    ASK,
-    ALLOW,
-    DENY
-}
-
-public class PermissionManager : Singleton<PermissionManager>
-{
-    private void Awake()
+    public class PermissionManager : Singleton<PermissionManager>
     {
-        Instance = this;
+        private void Awake()
+        {
+            Instance = this;
+            Permissions.LoadPermissions();
+        }
+
+        public PermissionState GetPermission(Permission perm)
+        {
+            return Permissions.GetServerPermission(perm);
+        }
+
+        internal void LoadServerPermissions(string currentServer)
+        {
+            Permissions.LoadServerPermissions(currentServer);
+        }
     }
 }
