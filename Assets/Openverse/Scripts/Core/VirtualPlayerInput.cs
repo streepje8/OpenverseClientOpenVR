@@ -27,59 +27,67 @@ namespace Openverse.Core
             XRNode.RightHand,
         };
 
-        void Start()
-        { 
-        }
+        private int lastCount = 0;
 
         void Update()
         {
-            if (leftController.inputDevice.isValid) //wait for the shit to load
+            foreach (XRNode node in collectedDevices)
             {
-                if(devices.Count < 1)
+                var foundDevices = new List<InputDevice>();
+                InputDevices.GetDevicesAtXRNode(node, foundDevices);
+                if (foundDevices.Count == 1)
                 {
-                    foreach (XRNode node in collectedDevices)
+                    if (!devices.ContainsKey(node))
                     {
-                        var foundDevices = new List<InputDevice>();
-                        InputDevices.GetDevicesAtXRNode(node, foundDevices);
-                        if (foundDevices.Count == 1)
-                        {
-                            devices.Add(node, foundDevices[0]);
-                            Debug.Log("Found a controller: " + foundDevices[0].name);
-                        }
-                        else if (foundDevices.Count > 1)
-                        {
-                            devices.Add(node, foundDevices[0]);
-                            Debug.LogWarning("Found more than one device of " + node.ToString() + "!");
-                        }
-                    }
-                    InputDevices.GetDevicesAtXRNode(XRNode.HardwareTracker, trackers);
-                    foreach (InputDevice device in devices.Values)
-                    {
-                        List<InputFeatureUsage> usages = new List<InputFeatureUsage>();
-                        device.TryGetFeatureUsages(usages);
-                        Debug.Log(usages.Count);
-                        features.Add(device, usages);
+                        devices.Add(node, foundDevices[0]);
+                        Debug.Log("Found a controller: " + foundDevices[0].name);
                     }
                 }
-                foreach (KeyValuePair<InputDevice, List<InputFeatureUsage>> keyValuePair in features)
+                else if (foundDevices.Count > 1)
                 {
-                    foreach (InputFeatureUsage usage in keyValuePair.Value)
+                    //devices.Add(node, foundDevices[0]);
+                    Debug.LogWarning("Found more than one device of " + node.ToString() + "!");
+                }
+                else if(foundDevices.Count < 1)
+                {
+                    if(devices.ContainsKey(node))
                     {
-                        if (usage.type == typeof(bool))
-                        {
-                            if (buttons.ContainsKey(usage.name))
-                            {
-                                buttons.Remove(usage.name);
-                            }
-                            keyValuePair.Key.TryGetFeatureValue(usage.As<bool>(), out bool buttonValue);
-                            buttons.Add(usage.name, buttonValue);
-                        }
+                        devices.Remove(node);
                     }
                 }
-                foreach (string key in buttons.Keys)
+            }
+            if(devices.Count != lastCount)
+            {
+            features = new Dictionary<InputDevice, List<InputFeatureUsage>>();
+                InputDevices.GetDevicesAtXRNode(XRNode.HardwareTracker, trackers);
+                foreach (InputDevice device in devices.Values)
                 {
-                    Debug.Log(key + " is equal to " + buttons[key]);
+                    List<InputFeatureUsage> usages = new List<InputFeatureUsage>();
+                    device.TryGetFeatureUsages(usages);
+                    Debug.Log(usages.Count);
+                    features.Add(device, usages);
                 }
+            }
+
+            //Get the input
+            foreach (KeyValuePair<InputDevice, List<InputFeatureUsage>> keyValuePair in features)
+            {
+                foreach (InputFeatureUsage usage in keyValuePair.Value)
+                {
+                    if (usage.type == typeof(bool))
+                    {
+                        if (!buttons.ContainsKey(usage.name))
+                        {
+                            buttons.Add(usage.name, false);
+                        }
+                        keyValuePair.Key.TryGetFeatureValue(usage.As<bool>(), out bool buttonValue);
+                        buttons[usage.name] = buttonValue;
+                    }
+                }
+            }
+            foreach (KeyValuePair<string, bool> inputset in buttons)
+            {
+                Debug.Log(inputset.Key + " is equal to " + inputset.Value);
             }
         }
     }
