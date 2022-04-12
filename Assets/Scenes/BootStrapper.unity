@@ -174,6 +174,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1936412786450585464, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
+      propertyPath: leftController
+      value: 
+      objectReference: {fileID: 498435333}
     - target: {fileID: 3131788456916884784, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -282,6 +286,17 @@ MonoBehaviour:
   m_BeforeTransparentBundles: []
   m_BeforeStackBundles: []
   m_AfterStackBundles: []
+--- !u!114 &498435333 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3131788457445542539, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
+  m_PrefabInstance: {fileID: 491248560}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae26e19cd956134bbdf3c6f65bf393a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &684121971 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1880639358085705158, guid: 9e7c5d6f85197724f8c9b208cada2f7c, type: 3}
@@ -549,6 +564,7 @@ MonoBehaviour:
   settings: {fileID: 11400000, guid: 1104d5af3a01951418364211f0b6c233, type: 2}
   allClientAssets: []
   clientAssets: {fileID: 0}
+  currentServer: 
 --- !u!4 &1361250725
 Transform:
   m_ObjectHideFlags: 0
