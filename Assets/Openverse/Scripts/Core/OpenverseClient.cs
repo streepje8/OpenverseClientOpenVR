@@ -9,6 +9,7 @@
 namespace Openverse.Core
 {
     using Openverse.Data;
+    using Openverse.Input;
     using Openverse.NetCode;
     using Openverse.Variables;
     using RiptideNetworking;
@@ -155,6 +156,18 @@ namespace Openverse.Core
         public void AddObject(Guid id, NetworkedObject obj)
         {
             NetworkedObjects.Add(id, obj);
+        }
+
+        private const float deviceCheckTime = 2f;
+        private float deviceCheckTimer = 0f;
+        private void Update()
+        {
+            deviceCheckTimer += Time.deltaTime;
+            if (deviceCheckTimer > deviceCheckTime)
+            {
+                OpenverseInput.UpdateDevices();
+                deviceCheckTimer = 0f;
+            }                
         }
     }
 }
