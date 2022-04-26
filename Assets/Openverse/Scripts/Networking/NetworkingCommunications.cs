@@ -22,14 +22,17 @@ namespace Openverse.NetCode
             transformObject,
             addComponent,
             removeComponent,
-            moveClientMoveable
+            moveClientMoveable,
+            RequestInput
         }
+
         public enum ClientToServerId : ushort
         {
             playerName = 1,
             vrPositions,
             playerReady,
-            moveClientMoveable
+            moveClientMoveable,
+            supplyInput
         }
     }
 }

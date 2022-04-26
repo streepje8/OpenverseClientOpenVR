@@ -55,6 +55,12 @@ namespace Openverse.Core
         }
 
         #region Messages
+        [MessageHandler((ushort)ServerToClientId.RequestInput)]
+        private static void OnInputRequest(Message message)
+        {
+            OpenverseClient.Instance?.player?.input?.OnRequestInput(message);
+        }
+
         [MessageHandler((ushort)ServerToClientId.moveClientMoveable)]
         private static void OnClientMoveableMoved(Message message)
         {

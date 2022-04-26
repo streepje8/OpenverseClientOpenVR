@@ -19,11 +19,14 @@ namespace Openverse.Core
         public GameObject handLeft;
         public GameObject handRight;
 
+        [HideInInspector]public VirtualPlayerInput input;
+
         public bool sendPositions { get; private set; } = false;
 
         private void Awake()
         {
             DontDestroyOnLoad(this.gameObject);
+            input = GetComponent<VirtualPlayerInput>();
         }
 
         private void FixedUpdate()

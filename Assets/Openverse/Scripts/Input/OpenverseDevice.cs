@@ -120,6 +120,34 @@ namespace Openverse.Input
             throw new Exception("You are not allowed to request input of type: " + typeof(T).Name);
         }
 
+        public object Get(Type inputType, string name)
+        {
+            switch (inputType.Name) //would rather do the type instead of its name but c# doesn't like that (yet)
+            {
+                case "Single":
+                    return GetFloat(name.ToLower());
+                case "Boolean":
+                    return GetBool(name.ToLower());
+                case "UInt32":
+                    return GetUInt(name.ToLower());
+                case "Vector2":
+                    return GetVector2(name.ToLower());
+                case "Vector3":
+                    return GetVector3(name.ToLower());
+                case "Quaternion":
+                    return GetQuaternion(name.ToLower());
+                case "InputTrackingState":
+                    return GetState(name.ToLower());
+                case "Hand":
+                    return GetHand(name.ToLower());
+                case "Bone":
+                    return GetBone(name.ToLower());
+                case "Eyes":
+                    return GetEyes(name.ToLower());
+            }
+            throw new Exception("You are not allowed to request input of type: " + inputType.Name);
+        }
+
         #region Get Specific Functions
         private bool GetBool(string name)
         {
