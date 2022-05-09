@@ -9,6 +9,8 @@ namespace Openverse.Core
 {
     using Openverse.Events;
     using UnityEngine;
+
+    [CreateAssetMenu(fileName = "NewClientSettings", menuName = "Openverse/Settings/Client Settings Profile", order = 100)]
     public class OpenverseClientSettings : ScriptableObject
     {
         public bool isLoggedIn = false;

@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adcd74cb7bc558d45998885bf15f9ead, type: 3}
+  m_Name: DefaultUISettings
+  m_EditorClassIdentifier: 
+  UIPanelPrefab: {fileID: 7881700887836546514, guid: d8f04c3100b34a14698860c3d21c5cd1, type: 3}
+  UIButtonPrefab: {fileID: 3782177729291604180, guid: d5b70b76b9d26c640b2bf36ceadaad2d, type: 3}
