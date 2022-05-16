@@ -31,7 +31,8 @@ namespace Openverse.Core
 
         private void FixedUpdate()
         {
-            OpenversePlayer.SendVRPositions(this);
+            if(OpenverseClient.Instance.isConnected)
+                OpenversePlayer.SendVRPositions(this);
         }
 
         public void OnWorldStart()

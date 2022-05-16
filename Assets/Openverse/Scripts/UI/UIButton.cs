@@ -1,12 +1,14 @@
 namespace Openverse.UI
 {
+    using Openverse.Core;
+    using Openverse.Events;
     using System;
     using TMPro;
     using UnityEngine;
     using UnityEngine.Events;
     using UnityEngine.UI;
 
-    public class UIButton : UIElement
+    public class UIButton : UIElement, LazerInteractable
     {
         public enum ButtonStatus
         {
@@ -20,7 +22,7 @@ namespace Openverse.UI
         [HideInInspector] public Image icon;
         public ButtonStatus status
         {
-            set
+            private set
             {
                 m_status = value;
                 UpdateButton();
@@ -37,13 +39,56 @@ namespace Openverse.UI
         public Color pressedTextColor;
         public Color selectedTextColor;
 
-        public UnityEvent onClick;
+        public delegate void onClickHandler();
+        [HideInInspector]public event onClickHandler onClickEvent;
+        public GameEvent onClick;
+
+        private BoxCollider buttonBox;
 
         void Start()
+        {
+            Init();
+        }
+        private float disablecooldown = 0f;
+        private void FixedUpdate()
+        {
+            if(UIManager.Instance.settings.CurrentUIMode == ControlMethod.Physical)
+            {
+                bool isTouching = buttonBox.bounds.Contains(OpenverseClient.Instance.player.handLeft.transform.position) || buttonBox.bounds.Contains(OpenverseClient.Instance.player.handRight.transform.position);
+                if (isTouching)
+                {
+                    status = ButtonStatus.Selected;
+                }
+                else
+                {
+                    if (status == ButtonStatus.Selected)
+                    {
+                        Click();
+                        status = ButtonStatus.Pressed;
+                    } else
+                    {
+                        status = ButtonStatus.Normal;
+                    }
+                }
+            }
+            if(UIManager.Instance.settings.CurrentUIMode == ControlMethod.Lazer)
+            {
+                if(disablecooldown >= 0f)
+                {
+                    disablecooldown -= Time.deltaTime;
+                } else
+                {
+                    status = ButtonStatus.Normal;
+                }
+            }
+        }
+
+        public void Init()
         {
             txt = GetComponentInChildren<TextMeshProUGUI>();
             background = GetComponent<Image>();
             icon = GetComponentInChildren<Image>();
+            buttonBox = GetComponent<BoxCollider>();
         }
 
         void UpdateButton()
@@ -81,7 +126,8 @@ namespace Openverse.UI
 
         public void Click()
         {
-            onClick.Invoke();
+            onClickEvent?.Invoke();
+            onClick?.Raise();
         }
 
         public override void OnResize(Vector2 newSize)
@@ -94,6 +140,18 @@ namespace Openverse.UI
             iconTransform.position = new Vector3((newSize.x / 2) - 20, iconTransform.position.y, iconTransform.position.z);
             RectTransform textTransform = (RectTransform)txt.transform;
             textTransform.offsetMin = new Vector2(newSize.y + 10, textTransform.offsetMin.y);
+        }
+
+        public void OnLazerHover()
+        {
+            status = ButtonStatus.Selected;
+            disablecooldown = 0.1f;
+        }
+
+        public void OnLazerClick()
+        {
+            Click();
+            status = ButtonStatus.Pressed;
         }
     }
 }

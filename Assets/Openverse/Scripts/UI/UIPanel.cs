@@ -56,7 +56,8 @@ namespace Openverse.UI
 
         internal void Close()
         {
-            foreach(UIElement element in elements) {
+            for (int i = elements.Count - 1; i >= 0; i--) {
+                UIElement element = elements[i];
                 element.Destroy();
             }
             Destroy(gameObject);

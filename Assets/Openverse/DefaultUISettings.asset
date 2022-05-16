@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIPanelPrefab: {fileID: 7881700887836546514, guid: d8f04c3100b34a14698860c3d21c5cd1, type: 3}
   UIButtonPrefab: {fileID: 3782177729291604180, guid: d5b70b76b9d26c640b2bf36ceadaad2d, type: 3}
+  CurrentUIMode: 1

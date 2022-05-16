@@ -32,6 +32,11 @@ namespace Openverse.Core
 
         private bool goToHome = true;
         public string currentServer = "";
+        public bool isConnected
+        {
+            get;
+            private set;
+        }
 
         public void OnValidate()
         {
@@ -49,11 +54,10 @@ namespace Openverse.Core
 #endif
         }
 
-        void Start()
+        void Awake()
         {
             DontDestroyOnLoad(this.gameObject);
             Instance = this;
-            connectToNextServer();
         }
 
         public void connectToNextServer()
@@ -62,6 +66,8 @@ namespace Openverse.Core
             {
                 OpenverseNetworkClient client = Instantiate(settings.clientPrefab).GetComponent<OpenverseNetworkClient>();
                 client.settings = settings;
+                client.Client.Connected += (object sender, EventArgs e) => { isConnected = true; };
+                client.Client.Disconnected += (object sender, EventArgs e) => { isConnected = false; };
                 client.Connect(goToHome ? settings.startupJoinIP : nextServer, settings.port);
                 DontDestroyOnLoad(client);
             }
@@ -160,6 +166,7 @@ namespace Openverse.Core
 
         private const float deviceCheckTime = 2f;
         private float deviceCheckTimer = 0f;
+
         private void Update()
         {
             deviceCheckTimer += Time.deltaTime;

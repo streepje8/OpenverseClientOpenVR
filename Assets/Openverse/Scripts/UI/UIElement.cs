@@ -45,7 +45,7 @@ namespace Openverse.UI
                 Destroy(gameObject);
                 return;
             }
-            transform.parent = panel.transform;
+            transform.SetParent(panel.transform);
             parentPanel?.AddElement(this);
         }
 
