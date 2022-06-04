@@ -12,6 +12,10 @@ namespace Openverse.UI
                 RectTransform rect = (RectTransform)transform;
                 OnResize(new Vector2(value, rect.sizeDelta.y) / transform.localScale);
             }
+            get
+            {
+                return GetSize().x;
+            }
         }
 
         public float height
@@ -21,6 +25,10 @@ namespace Openverse.UI
                 RectTransform rect = (RectTransform)transform;
                 OnResize(new Vector2(rect.sizeDelta.x, value) / transform.localScale);
             }
+            get
+            {
+                return GetSize().y;
+            }
         }
 
         public Vector2 size
@@ -29,6 +37,16 @@ namespace Openverse.UI
             {
                 OnResize(value / transform.localScale);
             }
+            get
+            {
+                return GetSize();
+            }
+        }
+
+        public virtual Vector2 GetSize()
+        {
+            RectTransform rect = (RectTransform)transform;
+            return rect.sizeDelta;
         }
 
         public virtual void OnResize(Vector2 newSize) {

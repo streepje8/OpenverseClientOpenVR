@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Openverse.UI
 {
-    using System.Collections.Generic;
+    using Openverse.Core;
     using UnityEngine;
 
     public class UIManager : Singleton<UIManager>
@@ -43,7 +43,7 @@ namespace Openverse.UI
 
         public UIPanel CreateUIPanel()
         {
-            UIPanel panel = Instantiate(settings.UIPanelPrefab).GetComponent<UIPanel>();
+            UIPanel panel = Instantiate(settings.prefabs.UIPanel).GetComponent<UIPanel>();
             panel.GetComponent<Canvas>().worldCamera = Camera.main;
             if(currentPanel != null)
                 currentPanel.panelCurrent = false;
@@ -58,7 +58,7 @@ namespace Openverse.UI
 
         public UIButton CreateButton(UIPanel panel,Vector2 position,Sprite icon = null, string text = null)
         {
-            UIButton button = Instantiate(settings.UIButtonPrefab).GetComponent<UIButton>();
+            UIButton button = Instantiate(settings.prefabs.UIButton).GetComponent<UIButton>();
             button.Init();
             button.SetPanel(panel);
             button.transform.position = position;
@@ -68,10 +68,36 @@ namespace Openverse.UI
             return button;
         }
 
+        public UIText CreateText(UIPanel panel, string text = "New Text") => CreateText(panel, Vector2.zero, text);
+
+        public UIText CreateText(UIPanel panel, Vector2 position, string text = "New Text")
+        {
+            UIText textObj = Instantiate(settings.prefabs.UIText).GetComponent<UIText>();
+            textObj.Init();
+            textObj.SetPanel(panel);
+            textObj.SetText(text);
+            textObj.transform.position = position;
+            SetGameObjectLayer(textObj.gameObject, UILayer);
+            return textObj;
+        }
+
         public void AlertBox(string message)
         {
             UIPanel alert = CreateUIPanel();
-            //TODO fix this!
+            alert.background.texture = settings.backgrounds.defaultBG;
+            UIText text = CreateText(alert, Vector2.up * 0.125f, message);
+            UIButton button = CreateButton(alert, -Vector2.up * 0.25f, settings.icons.xMark, "Close");
+            alert.width = 1f;
+            alert.height = 1f;
+            text.size *= 0.1f;
+            text.width *= 0.95f; //make text less wide
+            button.size *= 0.1f;
+            
+            alert.showBackground = true;
+            alert.panelPosition = OpenverseClient.Instance.player.transform.position + OpenverseClient.Instance.player.transform.forward * 2f + (OpenverseClient.Instance.player.head.transform.localPosition.y / 2f * Vector3.up);
+            alert.lookAtPlayer = true;
+            text.color = new Color(0.03189604f, 0.03189604f, 0.03189604f, 1);
+            button.onClickEvent += () => { alert.Close(); };
         }
 
         public void CloseCurrentPanel()

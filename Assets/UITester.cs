@@ -7,11 +7,9 @@ public class UITester : MonoBehaviour
 {
     private UIPanel panel;
 
-    void Start()
+    public void DOThings()
     {
-        panel = UIManager.Instance.CreateUIPanel();
-        UIButton button = UIManager.Instance.CreateButton(panel,null, "Epic Test Button");
-        button.onClickEvent += () => { Debug.Log("Noice"); };
+        UIManager.Instance.AlertBox("Something has requested me to show you this epic popup.");
     }
 
     // Update is called once per frame

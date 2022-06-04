@@ -18,7 +18,7 @@ namespace Openverse.UI
             Pressed
         }
         [HideInInspector] public TextMeshProUGUI txt;
-        [HideInInspector] public Image background;
+        [HideInInspector] public RawImage background;
         [HideInInspector] public Image icon;
         public ButtonStatus status
         {
@@ -49,6 +49,7 @@ namespace Openverse.UI
         {
             Init();
         }
+
         private float disablecooldown = 0f;
         private bool canClickPositional = true;
         private void FixedUpdate()
@@ -111,7 +112,7 @@ namespace Openverse.UI
         public void Init()
         {
             txt = GetComponentInChildren<TextMeshProUGUI>();
-            background = GetComponent<Image>();
+            background = GetComponent<RawImage>();
             icon = GetComponentInChildren<Image>();
             buttonBox = GetComponent<BoxCollider>();
         }
@@ -155,9 +156,16 @@ namespace Openverse.UI
             onClick?.Raise();
         }
 
+        public override Vector2 GetSize()
+        {
+            return transform.localScale;
+        }
+
         public override void OnResize(Vector2 newSize)
         {
-            base.OnResize(newSize);
+            transform.localScale = new Vector3(newSize.x, newSize.y, (newSize.x + newSize.y) / 2f);
+            //base.OnResize(newSize);
+            /*
             RectTransform backgroundTransform = (RectTransform)background.transform;
             backgroundTransform.sizeDelta = newSize;
             RectTransform iconTransform = (RectTransform)icon.transform;
@@ -165,6 +173,7 @@ namespace Openverse.UI
             iconTransform.position = new Vector3((newSize.x / 2) - 20, iconTransform.position.y, iconTransform.position.z);
             RectTransform textTransform = (RectTransform)txt.transform;
             textTransform.offsetMin = new Vector2(newSize.y + 10, textTransform.offsetMin.y);
+            */
         }
 
         public void OnLazerHover()
