@@ -7,7 +7,29 @@ namespace Openverse.UI
     public class UIPanel : MonoBehaviour
     {
         public RawImage background;
+        [HideInInspector]public UIPanelCursor myCursor;
         [HideInInspector]public List<UIElement> elements = new List<UIElement>();
+        [HideInInspector]public bool panelCurrent = false;
+
+        private void Start()
+        {
+            if (myCursor == null)
+            {
+                myCursor = GetComponentInChildren<UIPanelCursor>();
+                myCursor.parent = this;
+            }
+        }
+
+        private void Update()
+        {
+            if(panelCurrent && UIManager.Instance.settings.CurrentUIMode == ControlMethod.Positional)
+            {
+                myCursor.gameObject.SetActive(true);
+            } else
+            {
+                myCursor.gameObject.SetActive(false);
+            }
+        }
 
         public bool showBackground
         {
@@ -52,6 +74,10 @@ namespace Openverse.UI
                 rect = (RectTransform)background.transform;
                 rect.sizeDelta = value;
             }
+            get
+            {
+                return ((RectTransform)transform).sizeDelta;
+            }
         }
 
         internal void Close()
@@ -60,6 +86,7 @@ namespace Openverse.UI
                 UIElement element = elements[i];
                 element.Destroy();
             }
+            UIManager.Instance.CloseUIPanel(this, false);
             Destroy(gameObject);
         }
 
@@ -71,6 +98,12 @@ namespace Openverse.UI
         public void AddElement(UIElement element)
         {
             elements.Add(element);
+            if(myCursor == null)
+            {
+                myCursor = GetComponentInChildren<UIPanelCursor>();
+                myCursor.parent = this;
+            }
+            myCursor.transform.SetAsLastSibling();
         }
 
         public void RemoveElement(UIElement element)

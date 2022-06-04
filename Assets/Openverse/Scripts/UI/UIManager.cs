@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Openverse.UI
 {
     using System.Collections.Generic;
@@ -22,24 +24,31 @@ namespace Openverse.UI
             }
         }
         
+        public UIPanel currentPanel
+        {
+            get
+            {
+                if(activePanels.Count > 0)
+                    return activePanels.Top();
+                return null;
+            }
+        }
 
-        private List<UIPanel> activePanels = new List<UIPanel>();
+        private SemiStack<UIPanel> activePanels = new SemiStack<UIPanel>();
 
         private void Awake()
         {
             Instance = this;
         }
 
-        private void FixedUpdate()
-        {
-            
-        }
-
         public UIPanel CreateUIPanel()
         {
             UIPanel panel = Instantiate(settings.UIPanelPrefab).GetComponent<UIPanel>();
             panel.GetComponent<Canvas>().worldCamera = Camera.main;
-            activePanels.Add(panel);
+            if(currentPanel != null)
+                currentPanel.panelCurrent = false;
+            activePanels.Push(panel);
+            currentPanel.panelCurrent = true;
             panel.Open();
             SetGameObjectLayer(panel.gameObject, UILayer);
             return panel;
@@ -65,13 +74,28 @@ namespace Openverse.UI
             //TODO fix this!
         }
 
+        public void CloseCurrentPanel()
+        {
+            CloseUIPanel(activePanels.Pop());
+            currentPanel.panelCurrent = true;
+        }
+
+        public void CloseUIPanel(UIPanel p, bool callCloseMethod = true)
+        {
+            if (activePanels.Contains(p))
+            {
+                activePanels.Remove(p);
+            }
+            if (callCloseMethod) p.Close();
+        }
+
         public void CloseAllUI()
         {
             foreach (UIPanel panel in activePanels)
             {
                 panel.Close();
             }
-            activePanels = new List<UIPanel>();
+            activePanels = new SemiStack<UIPanel>();
         }
 
         //Helper functions
@@ -92,5 +116,25 @@ namespace Openverse.UI
                 if ((value & (1 << l)) != 0) return l;
             return -1;
         }
+    }
+}
+
+public class SemiStack<T> : LinkedList<T>
+{
+    public T Pop()
+    {
+        T first = Top();
+        RemoveFirst();
+        return first;
+    }
+
+    public void Push(T obj)
+    {
+        AddFirst(obj);
+    }
+    
+    public T Top()
+    {
+        return First.Value;
     }
 }

@@ -50,9 +50,10 @@ namespace Openverse.UI
             Init();
         }
         private float disablecooldown = 0f;
+        private bool canClickPositional = true;
         private void FixedUpdate()
         {
-            if(UIManager.Instance.settings.CurrentUIMode == ControlMethod.Physical)
+            if(UIManager.Instance.settings.CurrentUIMode == ControlMethod.Physical && buttonBox != null)
             {
                 bool isTouching = buttonBox.bounds.Contains(OpenverseClient.Instance.player.handLeft.transform.position) || buttonBox.bounds.Contains(OpenverseClient.Instance.player.handRight.transform.position);
                 if (isTouching)
@@ -77,6 +78,30 @@ namespace Openverse.UI
                 {
                     disablecooldown -= Time.deltaTime;
                 } else
+                {
+                    status = ButtonStatus.Normal;
+                }
+            }
+            if (UIManager.Instance.settings.CurrentUIMode == ControlMethod.Positional && UIManager.Instance.currentPanel != null && UIManager.Instance.currentPanel.myCursor != null)
+            {
+                bool isTouching = buttonBox.bounds.Contains(UIManager.Instance.currentPanel.myCursor.transform.position);
+                if (isTouching && UIManager.Instance.currentPanel.myCursor.inDrag)
+                {
+                    status = ButtonStatus.Selected;
+                    if (UIManager.Instance.currentPanel.myCursor.currentDragDevice.Get<float>(UIManager.Instance.settings.PositionalClickButton) > 0.5f)
+                    {
+                        if (canClickPositional)
+                        {
+                            Click();
+                            canClickPositional = false;
+                        }
+                        status = ButtonStatus.Pressed;
+                    } else
+                    {
+                        canClickPositional = true;
+                    }
+                }
+                else
                 {
                     status = ButtonStatus.Normal;
                 }

@@ -16,5 +16,8 @@ namespace Openverse.UI
         public GameObject UIButtonPrefab;
         public ControlMethod CurrentUIMode = ControlMethod.Lazer;
         public string LazerClickButton = "Trigger";
+        public string PositionalClickButton = "Trigger";
+        public string PositionalDragButton = "Grip";
+        public Texture2D PositionalMouseTexture = null;
     }
 }

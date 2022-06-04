@@ -14,4 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   UIPanelPrefab: {fileID: 7881700887836546514, guid: d8f04c3100b34a14698860c3d21c5cd1, type: 3}
   UIButtonPrefab: {fileID: 3782177729291604180, guid: d5b70b76b9d26c640b2bf36ceadaad2d, type: 3}
-  CurrentUIMode: 1
+  CurrentUIMode: 2
+  LazerClickButton: Trigger
+  PositionalClickButton: Trigger
+  PositionalDragButton: Grip
+  PositionalMouseTexture: {fileID: 2800000, guid: 18c17065349797045b913c846a7171e1, type: 3}
