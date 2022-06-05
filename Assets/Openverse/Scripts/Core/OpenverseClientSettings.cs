@@ -22,7 +22,6 @@ namespace Openverse.Core
             }
         }
         public string username { get; private set; }
-        public string startupJoinIP;
         public ushort port;
         public GameObject clientPrefab;
         public GameObject playerPrefab;

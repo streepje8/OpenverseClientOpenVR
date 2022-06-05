@@ -8,6 +8,7 @@
 
 namespace Openverse.Core
 {
+    using Newtonsoft.Json;
     using Openverse.Data;
     using Openverse.Input;
     using Openverse.NetCode;
@@ -27,11 +28,12 @@ namespace Openverse.Core
         public StringReference nextServer;
         public OpenverseClientSettings settings;
         public static Dictionary<Guid, NetworkedObject> NetworkedObjects = new Dictionary<Guid, NetworkedObject>();
-        public UnityEngine.Object[] allClientAssets;
-        public AssetBundle clientAssets;
+        public UserSettings userSettings;
 
         private bool goToHome = true;
-        public string currentServer = "";
+        [HideInInspector]public UnityEngine.Object[] allClientAssets;
+        [HideInInspector]public AssetBundle clientAssets;
+        [HideInInspector]public string currentServer = "";
         public bool isConnected
         {
             get;
@@ -58,6 +60,34 @@ namespace Openverse.Core
         {
             DontDestroyOnLoad(this.gameObject);
             Instance = this;
+            //Load settings
+            LoadSettings();
+        }
+        
+        void LoadSettings()
+        {
+            string fileLoc = Application.persistentDataPath + "/Openverse/UserData/UserSettings.json";
+            if (File.Exists(fileLoc))
+            {
+                string fileContents = File.ReadAllText(fileLoc);
+                userSettings = JsonConvert.DeserializeObject<UserSettings>(fileContents);
+            }
+            else
+            {
+                SaveSettings();
+            }            
+        }
+
+        void SaveSettings()
+        {
+            string fileLoc = Application.persistentDataPath + "/Openverse/UserData/UserSettings.json";
+            string jsonString = JsonConvert.SerializeObject(userSettings, Formatting.Indented);
+            if (!File.Exists(fileLoc))
+            {
+                Directory.CreateDirectory(Application.persistentDataPath + "/Openverse/UserData");
+                File.Create(fileLoc).Dispose();
+            }
+            File.WriteAllText(fileLoc, jsonString);
         }
 
         public void connectToNextServer()
@@ -68,7 +98,7 @@ namespace Openverse.Core
                 client.settings = settings;
                 client.Client.Connected += (object sender, EventArgs e) => { isConnected = true; };
                 client.Client.Disconnected += (object sender, EventArgs e) => { isConnected = false; };
-                client.Connect(goToHome ? settings.startupJoinIP : nextServer, settings.port);
+                client.Connect(goToHome ? userSettings.HomeServerIP : nextServer, settings.port);
                 DontDestroyOnLoad(client);
             }
             goToHome = false;
@@ -163,14 +193,13 @@ namespace Openverse.Core
         {
             NetworkedObjects.Add(id, obj);
         }
-
-        private const float deviceCheckTime = 2f;
+        
         private float deviceCheckTimer = 0f;
 
         private void Update()
         {
             deviceCheckTimer += Time.deltaTime;
-            if (deviceCheckTimer > deviceCheckTime)
+            if (deviceCheckTimer > userSettings.DeviceCheckTime)
             {
                 OpenverseInput.UpdateDevices();
                 deviceCheckTimer = 0f;

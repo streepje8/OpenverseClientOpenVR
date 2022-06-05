@@ -51,6 +51,9 @@ MonoBehaviour:
     ConstantValue: 
     Variable: {fileID: 0}
   settings: {fileID: 11400000, guid: 1104d5af3a01951418364211f0b6c233, type: 2}
+  userSettings:
+    HomeServerIP: 127.0.0.1
+    DeviceCheckTime: 2
   allClientAssets: []
   clientAssets: {fileID: 0}
   currentServer: 
