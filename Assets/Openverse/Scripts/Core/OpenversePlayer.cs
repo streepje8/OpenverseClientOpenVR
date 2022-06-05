@@ -24,7 +24,7 @@ namespace Openverse.Core
 
         public static void Spawn(ushort id, string username, Vector3 position)
         {
-            VirtualPlayer player;
+            VirtualPlayer player = null;
             if (!(id == OpenverseNetworkClient.Instance.Client.Id))
             {
                 player = Instantiate(OpenverseNetworkClient.Instance.settings.playerPrefab, position, Quaternion.identity).GetComponent<VirtualPlayer>();

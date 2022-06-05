@@ -56,20 +56,14 @@ namespace Sly
             for (int index = 0; index < compileAbleCodeArray.Length; index++)
             {
                 char c = compileAbleCodeArray[index];
-                if (c == '"')
+                if (c == '"' && (!currentToken.EndsWith("\\") && state != CompileState.functionBody))
                 {
-                    if (!currentToken.EndsWith("\\") && state != CompileState.functionBody)
-                    {
-                        inString = !inString;
-                        c = (char)0;
-                    }
+                    inString = !inString;
+                    c = (char)0;
                 }
-                if (c != ' ' || inString)
+                if ((c != ' ' || inString) && c != 0)
                 {
-                    if (c != 0)
-                    {
-                        currentToken += c;
-                    }
+                    currentToken += c;
                 }
                 if (currentToken.ToLower().Equals("sly") && state == CompileState.nothing)
                 {
@@ -136,15 +130,18 @@ namespace Sly
                 }
                 if(c.Equals(')') && (state == CompileState.parametersStart || (state == CompileState.varibleAssignment && scope == CompilerScope.Parameter)))
                 {
-                    if(state == CompileState.varibleAssignment) { 
-                        SlyVariable slyVar = new SlyVariable();
-                        slyVar.type = parameterType;
-                        slyVar.name = currentToken.Replace(")", "");
+                    if(state == CompileState.varibleAssignment) {
+                        SlyVariable slyVar = new SlyVariable()
+                        {
+                            type = parameterType,
+                            name = currentToken.Replace(")", "")
+                        };
                         parameters.Add(slyVar);
                     }
-                    currentFunction = new SlyFunction(slyObjName);
-                    currentFunction.name = fieldname;
-                    currentFunction.returntype = currentType;
+                    currentFunction = new SlyFunction(slyObjName) {
+                        name = fieldname,
+                        returntype = currentType
+                    };
                     state = CompileState.functionReady;
                 }
                 if (c.Equals(';'))
@@ -152,9 +149,11 @@ namespace Sly
                     switch (state)
                     {
                         case CompileState.varibleAssignment:
-                            SlyVariable slyVar = new SlyVariable();
-                            slyVar.name = fieldname;
-                            slyVar.type = currentType;
+                            SlyVariable slyVar = new SlyVariable()
+                            {
+                                name = fieldname,
+                                type = currentType
+                            };
                             switch (scope)
                             {
                                 case CompilerScope.SlyObject:
@@ -300,10 +299,8 @@ namespace Sly
             if (s == null || s == "") return false;
 
             for (int i = 0; i < s.Length; i++)
-                if ((s[i] ^ '0') > 9)
-                    if(s[i] != '.') { 
-                        return false;
-                    }
+                if ((s[i] ^ '0') > 9 && s[i] != '.')
+                    return false;
 
             return true;
         }
@@ -335,10 +332,11 @@ namespace Sly
             variables = new List<SlyVariable>();
             foreach (SlyVariable var in type.variables)
             {
-                SlyVariable copy = new SlyVariable();
-                copy.name = var.name;
-                copy.type = var.type;
-                copy.value = var.value;
+                SlyVariable copy = new SlyVariable() {
+                    name = var.name,
+                    type = var.type,
+                    value = var.value
+                };
                 variables.Add(copy);
             }
             this.functions = type.functions;
@@ -350,10 +348,11 @@ namespace Sly
             variables = new List<SlyVariable>();
             foreach (SlyVariable var in copyInstance.variables)
             {
-                SlyVariable copy = new SlyVariable();
-                copy.name = var.name;
-                copy.type = var.type;
-                copy.value = var.value;
+                SlyVariable copy = new SlyVariable() {
+                    name = var.name,
+                    type = var.type,
+                    value = var.value
+                };
                 variables.Add(copy);
             }
             this.functions = type.functions;
@@ -376,10 +375,11 @@ namespace Sly
             variables = new List<SlyVariable>();
             foreach (SlyVariable var in newType.variables)
             {
-                SlyVariable copy = new SlyVariable();
-                copy.name = var.name;
-                copy.type = var.type;
-                copy.value = var.value;
+                SlyVariable copy = new SlyVariable() {
+                    name = var.name,
+                    type = var.type,
+                    value = var.value
+                };
                 variables.Add(copy);
             }
             for(int i = 0; i < type.variables.Count; i++)

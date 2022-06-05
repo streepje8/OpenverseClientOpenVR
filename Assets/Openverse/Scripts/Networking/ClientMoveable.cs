@@ -36,15 +36,12 @@ namespace Openverse.NetCode
 
         private void FixedUpdate()
         {
-            if (autoSync)
+            if (autoSync && (transform.position != lastPOS || transform.rotation != lastRot || transform.localScale != lastScale))
             {
-                if (transform.position != lastPOS || transform.rotation != lastRot || transform.localScale != lastScale)
-                {
-                    lastPOS = transform.position;
-                    lastRot = transform.rotation;
-                    lastScale = transform.localScale;
-                    Sync();
-                }
+                lastPOS = transform.position;
+                lastRot = transform.rotation;
+                lastScale = transform.localScale;
+                Sync();
             }
         }
 

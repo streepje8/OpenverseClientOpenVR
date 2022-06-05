@@ -64,13 +64,10 @@ namespace Openverse.Data
             Component[] components = go.GetComponents<Component>();
             for (int i = 0; i < components.Length; i++)
             {
-                if (components[i] != null)
+                if (components[i] != null && !allowedTypes.Contains(components[i].GetType()))
                 {
-                    if (!allowedTypes.Contains(components[i].GetType()))
-                    {
-                        Destroy(components[i]);
-                        Debug.LogWarning("Removed component of type " + components[i].GetType() + ". This component type is not allowed!");
-                    }
+                    Destroy(components[i]);
+                    Debug.LogWarning("Removed component of type " + components[i].GetType() + ". This component type is not allowed!");
                 }
             }
         }

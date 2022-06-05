@@ -70,9 +70,9 @@ namespace Sly
         public SlyFunction resolveFunction(string slyFunction)
         {
             slyFunction = Regex.Replace(slyFunction, @"[^\w., -]", "");
-            if (vars.ContainsKey(slyFunction))
+            if (functions.TryGetValue(slyFunction, out SlyFunction func))
             {
-                return functions[slyFunction];
+                return func;
             }
             return null;
         }
