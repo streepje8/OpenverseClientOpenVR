@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: adcd74cb7bc558d45998885bf15f9ead, type: 3}
+  m_Name: DefaultUISettings
+  m_EditorClassIdentifier: 
+  prefabs:
+    UIPanel: {fileID: 7881700887836546514, guid: d8f04c3100b34a14698860c3d21c5cd1, type: 3}
+    UIButton: {fileID: 3782177729291604180, guid: d5b70b76b9d26c640b2bf36ceadaad2d, type: 3}
+    UIText: {fileID: 4986723836738917016, guid: 20002a648f5d31c459ba85412095002d, type: 3}
+  icons:
+    xMark: {fileID: 21300000, guid: e31721b643c55c54fbc762ed58aeef42, type: 3}
+  backgrounds:
+    defaultBG: {fileID: 2800000, guid: 5d78f746447c05041b23c7bd8272efd3, type: 3}
+  CurrentUIMode: 2
+  LazerClickButton: Trigger
+  PositionalClickButton: Trigger
+  PositionalDragButton: Grip
+  PositionalMouseTexture: {fileID: 2800000, guid: 18c17065349797045b913c846a7171e1, type: 3}
