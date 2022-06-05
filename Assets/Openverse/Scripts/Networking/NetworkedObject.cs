@@ -113,29 +113,26 @@ namespace Openverse.NetCode
                     //Actually asign the properties
                     foreach (PropertyInfo prop in c.GetType().GetProperties())
                     {
-                        if (properties.TryGetValue(prop.Name, out PropertyAssignment assignment))
+                        if (properties.TryGetValue(prop.Name, out PropertyAssignment assignment) && assignment != null)
                         {
-                            if (assignment != null)
+                            if (assignment.isPrimitive)
                             {
-                                if (assignment.isPrimitive)
-                                {
-                                    prop.SetValue(c, assignment.Value);
-                                }
-                                else
-                                {
-                                    object extracted = ExtractType(assignment.Value, prop.PropertyType);
-                                    if (extracted != null)
-                                        prop.SetValue(c, extracted);
-                                }
-                                if (!obj.networkedProperties.ContainsKey(c.GetType().Name + "$.$" + prop.Name) && !obj.networkedComponents.ContainsKey(c.name + "$.$" + prop.Name))
-                                {
-                                    obj.networkedProperties.Add(c.GetType().Name + "$.$" + prop.Name, prop);
-                                    obj.networkedComponents.Add(c.GetType().Name + "$.$" + prop.Name, c);
-                                }
-                                else
-                                {
-                                    Debug.LogWarning("Variable " + c.GetType().Name + "$.$" + prop.Name + " could not be synced!");
-                                }
+                                prop.SetValue(c, assignment.Value);
+                            }
+                            else
+                            {
+                                object extracted = ExtractType(assignment.Value, prop.PropertyType);
+                                if (extracted != null)
+                                    prop.SetValue(c, extracted);
+                            }
+                            if (!obj.networkedProperties.ContainsKey(c.GetType().Name + "$.$" + prop.Name) && !obj.networkedComponents.ContainsKey(c.name + "$.$" + prop.Name))
+                            {
+                                obj.networkedProperties.Add(c.GetType().Name + "$.$" + prop.Name, prop);
+                                obj.networkedComponents.Add(c.GetType().Name + "$.$" + prop.Name, c);
+                            }
+                            else
+                            {
+                                Debug.LogWarning("Variable " + c.GetType().Name + "$.$" + prop.Name + " could not be synced!");
                             }
                         }
                     }
