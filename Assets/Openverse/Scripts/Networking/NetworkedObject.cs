@@ -113,17 +113,17 @@ namespace Openverse.NetCode
                     //Actually asign the properties
                     foreach (PropertyInfo prop in c.GetType().GetProperties())
                     {
-                        if (properties.ContainsKey(prop.Name))
+                        if (properties.TryGetValue(prop.Name, out PropertyAssignment assignment))
                         {
-                            if (properties.ContainsKey(prop.Name) && properties[prop.Name] != null)
+                            if (assignment != null)
                             {
-                                if (properties[prop.Name].isPrimitive)
+                                if (assignment.isPrimitive)
                                 {
-                                    prop.SetValue(c, properties[prop.Name].Value);
+                                    prop.SetValue(c, assignment.Value);
                                 }
                                 else
                                 {
-                                    object extracted = ExtractType(properties[prop.Name].Value, prop.PropertyType);
+                                    object extracted = ExtractType(assignment.Value, prop.PropertyType);
                                     if (extracted != null)
                                         prop.SetValue(c, extracted);
                                 }

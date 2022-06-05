@@ -201,9 +201,9 @@ namespace Openverse.Permissions
         public static PermissionState GetDefaultPermission(Permission permission)
         {
             //Not needed but for savety
-            if (userDefaults.ContainsKey(permission))
+            if (userDefaults.TryGetValue(permission, out PermissionState state))
             {
-                return userDefaults[permission];
+                return state;
             }
             return PermissionState.ASK;
         }
@@ -248,9 +248,9 @@ namespace Openverse.Permissions
 
         public static PermissionState GetServerPermission(Permission permission)
         {
-            if (serverPermissions.ContainsKey(permission))
+            if (serverPermissions.TryGetValue(permission, out PermissionState state))
             {
-                return serverPermissions[permission];
+                return state;
             }
             return GetDefaultPermission(permission);
         }

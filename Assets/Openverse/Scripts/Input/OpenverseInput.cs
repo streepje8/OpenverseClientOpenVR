@@ -112,21 +112,29 @@ namespace Openverse.Input
 
         public static void AddDeviceConnectionHandler(OpenverseDeviceType type, OnDeviceConnected handler)
         {
-            if (!specificHandlers.ContainsKey(type))
+            if (!specificHandlers.TryGetValue(type, out List<OnDeviceConnected> list))
             {
-                specificHandlers.Add(type, new List<OnDeviceConnected>());
+                List<OnDeviceConnected> connectedList = new List<OnDeviceConnected>();
+                connectedList.Add(handler);
+                specificHandlers.Add(type, connectedList);
             }
-            specificHandlers[type].Add(handler);
+            else
+            {
+                list.Add(handler);
+            }
         }
 
         public static void RemoveDeviceConnectionHandler(OpenverseDeviceType type, OnDeviceConnected handler)
         {
-            if (!specificHandlers.ContainsKey(type))
+            if (!specificHandlers.TryGetValue(type, out List<OnDeviceConnected> list))
             {
                 specificHandlers.Add(type, new List<OnDeviceConnected>());
             }
-            if (specificHandlers[type].Contains(handler))
-                specificHandlers[type].Remove(handler);
+            else
+            {
+                if (list.Contains(handler))
+                    list.Remove(handler);
+            }
         }
 
         internal static bool DeviceIsRegistered(InputDevice inputDevice)
