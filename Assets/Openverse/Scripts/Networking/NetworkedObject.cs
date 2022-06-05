@@ -45,7 +45,7 @@ namespace Openverse.NetCode
                 if (AllowedComponents.allowedTypesList.Count > index)
                 {
                     Type type = AllowedComponents.allowedTypesList[index];
-                    Component c;
+                    Component c = null;
                     if (obj.gameObject.GetComponent(type) != null)
                     {
                         c = obj.gameObject.GetComponent(type);

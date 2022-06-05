@@ -257,14 +257,7 @@ namespace Openverse.Permissions
 
         protected static bool SetServerPermission(Permission permission, PermissionState state)
         {
-            if (serverPermissions.ContainsKey(permission))
-            {
-                serverPermissions[permission] = state;
-            }
-            else
-            {
-                serverPermissions.Add(permission, state);
-            }
+            serverPermissions[permission] = state;
             SaveServerPermissions(OpenverseClient.Instance.currentServer);
             return true;
         }
@@ -272,14 +265,7 @@ namespace Openverse.Permissions
         protected static bool SetServerPermission(string name, Permission permission, PermissionState state)
         {
             LoadServerPermissions(name);
-            if (serverPermissions.ContainsKey(permission))
-            {
-                serverPermissions[permission] = state;
-            }
-            else
-            {
-                serverPermissions.Add(permission, state);
-            }
+            serverPermissions[permission] = state;
             SaveServerPermissions(name);
             LoadServerPermissions(OpenverseClient.Instance.currentServer);
             return true;
