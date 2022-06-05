@@ -208,14 +208,9 @@ namespace Openverse.Permissions
             return PermissionState.ASK;
         }
 
-        protected static bool SetDefaultPermission(Permission permission, PermissionState state)
+        protected static void SetDefaultPermission(Permission permission, PermissionState state)
         {
-            if (userDefaults.ContainsKey(permission))
-            {
-                userDefaults[permission] = state;
-                return true;
-            }
-            return false;
+            userDefaults[permission] = state;
         }
 
         public static void LoadServerPermissions(string name)

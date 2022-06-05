@@ -24,9 +24,9 @@ namespace Openverse.Input
             {
                 handler.Invoke(d);
             }
-            if(specificHandlers.ContainsKey(d.type))
+            if(specificHandlers.TryGetValue(d.type, out List<OnDeviceConnected> list))
             {
-                foreach(OnDeviceConnected handler in specificHandlers[d.type]) 
+                foreach(OnDeviceConnected handler in list) 
                 {
                     handler.Invoke(d);
                 }
