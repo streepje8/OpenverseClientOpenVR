@@ -60,9 +60,9 @@ namespace Sly
         public SlyVariable resolveVar(string slyVariable)
         {
             slyVariable = Regex.Replace(slyVariable, @"[^\w., -]", "");
-            if (vars.ContainsKey(slyVariable))
+            if (vars.TryGetValue(slyVariable, out SlyVariable var))
             {
-                return vars[slyVariable];
+                return var;
             }
             return null;
         }
