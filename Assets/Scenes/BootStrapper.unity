@@ -568,7 +568,9 @@ MonoBehaviour:
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
-          m_StringArgument: Failed to connect, please restart your client.
+          m_StringArgument: Failed to connect, check your connection and home server
+            status. If your home server is offline you can change it in your settings
+            json. When you finish restart your client!
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1500301248

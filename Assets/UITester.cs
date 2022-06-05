@@ -10,6 +10,7 @@ public class UITester : MonoBehaviour
 
     private void Start()
     {
+        
     }
 
     public void DOThings()

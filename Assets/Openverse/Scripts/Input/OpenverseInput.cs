@@ -102,6 +102,10 @@ namespace Openverse.Input
         public static void AddDeviceConnectionHandler(OnDeviceConnected handler)
         {
             genericHandlers.Add(handler);
+            foreach(OpenverseDevice device in connectedDevices)
+            {
+                handler.Invoke(device);
+            }
         }
 
         public static void RemoveDeviceConnectionHandler(OnDeviceConnected handler)

@@ -33,9 +33,6 @@ namespace Openverse.UI
 
         void Update()
         {
-            Debug.Log(leftController?.Get<float>(UIManager.Instance.settings.PositionalDragButton));
-            Debug.Log(rightController?.Get<float>(UIManager.Instance.settings.PositionalDragButton));
-
             if(leftController?.Get<float>(UIManager.Instance.settings.PositionalDragButton) > 0.5f)
             {
                 StartDrag(leftController);
@@ -58,7 +55,7 @@ namespace Openverse.UI
                 difference.z = 0;
                 difference.x *= parent.size.x;
                 difference.y *= parent.size.y;
-                transform.position = difference;
+                transform.localPosition = difference;
             } else
             {
                 sprite.enabled = false;

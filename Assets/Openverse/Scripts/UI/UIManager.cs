@@ -94,7 +94,9 @@ namespace Openverse.UI
             button.size *= 0.1f;
             
             alert.showBackground = true;
-            alert.panelPosition = OpenverseClient.Instance.player.transform.position + OpenverseClient.Instance.player.transform.forward * 2f + (OpenverseClient.Instance.player.head.transform.localPosition.y / 2f * Vector3.up);
+            Vector3 forward = OpenverseClient.Instance.player.head.transform.forward;
+            forward.y = 0;
+            alert.panelPosition = OpenverseClient.Instance.player.transform.position + forward * 2f + (OpenverseClient.Instance.player.head.transform.localPosition.y / 2f * Vector3.up);
             alert.lookAtPlayer = true;
             text.color = new Color(0.03189604f, 0.03189604f, 0.03189604f, 1);
             button.onClickEvent += () => { alert.Close(); };
