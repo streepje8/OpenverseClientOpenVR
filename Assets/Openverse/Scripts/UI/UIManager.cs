@@ -17,7 +17,7 @@ namespace Openverse.UI
             }
             set
             {
-                if (value == false)
+                if (!value)
                 {
                     CloseAllUI();
                 }

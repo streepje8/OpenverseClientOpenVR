@@ -8,7 +8,7 @@ namespace Openverse.UI
     using UnityEngine.Events;
     using UnityEngine.UI;
 
-    public class UIButton : UIElement, LazerInteractable
+    public class UIButton : UIElement, ILazerInteractable
     {
         public enum ButtonStatus
         {

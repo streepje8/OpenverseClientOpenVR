@@ -36,7 +36,7 @@ namespace Openverse.UI
                     Vector3 pointTwo = transform.position + (transform.rotation * Quaternion.Euler(rotationOffset) * Vector3.forward * 1000f);
                     if (Physics.Raycast(transform.position, pointTwo.normalized, out RaycastHit hit, 1000f, UILayer))
                     {
-                        LazerInteractable element = hit.collider.gameObject.GetComponent<LazerInteractable>();
+                        ILazerInteractable element = hit.collider.gameObject.GetComponent<ILazerInteractable>();
                         if (element != null)
                         {
                             element.OnLazerHover();

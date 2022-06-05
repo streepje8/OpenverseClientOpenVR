@@ -20,7 +20,7 @@ MonoBehaviour:
     xMark: {fileID: 21300000, guid: e31721b643c55c54fbc762ed58aeef42, type: 3}
   backgrounds:
     defaultBG: {fileID: 2800000, guid: 5d78f746447c05041b23c7bd8272efd3, type: 3}
-  CurrentUIMode: 1
+  CurrentUIMode: 2
   LazerClickButton: Trigger
   PositionalClickButton: Trigger
   PositionalDragButton: Grip

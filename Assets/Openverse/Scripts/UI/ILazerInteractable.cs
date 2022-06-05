@@ -1,6 +1,6 @@
 namespace Openverse.UI
 {
-    public interface LazerInteractable
+    public interface ILazerInteractable
     {
         public void OnLazerHover();
         public void OnLazerClick();
