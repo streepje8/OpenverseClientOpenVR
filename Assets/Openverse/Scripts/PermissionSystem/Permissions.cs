@@ -208,7 +208,7 @@ namespace Openverse.Permissions
             return PermissionState.ASK;
         }
 
-        protected static void SetDefaultPermission(Permission permission, PermissionState state)
+        public static void SetDefaultPermission(Permission permission, PermissionState state)
         {
             userDefaults[permission] = state;
         }
