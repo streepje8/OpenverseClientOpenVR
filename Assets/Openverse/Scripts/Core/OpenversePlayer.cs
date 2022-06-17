@@ -135,7 +135,7 @@ namespace Openverse.Core
             OpenverseClient.Instance.spawnNetworkedObject(message);
         }
 
-        private static byte[] currentFile = new byte[0];
+        private static byte[] currentFile = Array.Empty<byte>();
         private static string currentFileName = "";
         private static bool fileHasContents = false;
         private static string currentServer;
@@ -165,7 +165,7 @@ namespace Openverse.Core
                 if (fileHasContents) { File.WriteAllBytes(foldername + currentFileName + ".asset", currentFile); files.Add(foldername + currentFileName + ".asset"); }
                 currentFileName = message.GetString();
                 Debug.Log("Saving new file to:" + foldername + currentFileName);
-                currentFile = new byte[0];
+                currentFile = Array.Empty<byte>();
                 fileHasContents = false;
             }
             else

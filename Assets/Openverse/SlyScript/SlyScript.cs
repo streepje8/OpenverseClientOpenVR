@@ -38,7 +38,7 @@ namespace Sly
             //Parse Sly Object
             string compileAbleCode = sourceCode.Replace("\n", "").Replace("\t", "     ");
 
-            CompileState state = CompileState.nothing;
+            CompileState? state = CompileState.nothing;
             List<SlyVariable> prevariables = new List<SlyVariable>();
             List<SlyVariable> locals = new List<SlyVariable>();
             List<SlyVariable> parameters = new List<SlyVariable>();
@@ -48,7 +48,7 @@ namespace Sly
             SlyObjectType currentType = SlyObjectType.TypeUndefined;
             SlyObjectType parameterType = SlyObjectType.TypeUndefined;
             string fieldname = "";
-            CompilerScope scope = CompilerScope.SlyObject;
+            CompilerScope? scope = CompilerScope.SlyObject;
             bool inString = false;
             char[] compileAbleCodeArray = compileAbleCode.ToCharArray();
             string errorReason = "";
