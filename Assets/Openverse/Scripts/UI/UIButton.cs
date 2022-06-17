@@ -164,16 +164,6 @@ namespace Openverse.UI
         public override void OnResize(Vector2 newSize)
         {
             transform.localScale = new Vector3(newSize.x, newSize.y, (newSize.x + newSize.y) / 2f);
-            //base.OnResize(newSize);
-            /*
-            RectTransform backgroundTransform = (RectTransform)background.transform;
-            backgroundTransform.sizeDelta = newSize;
-            RectTransform iconTransform = (RectTransform)icon.transform;
-            iconTransform.sizeDelta = new Vector2(newSize.y, newSize.y);
-            iconTransform.position = new Vector3((newSize.x / 2) - 20, iconTransform.position.y, iconTransform.position.z);
-            RectTransform textTransform = (RectTransform)txt.transform;
-            textTransform.offsetMin = new Vector2(newSize.y + 10, textTransform.offsetMin.y);
-            */
         }
 
         public void OnLazerHover()

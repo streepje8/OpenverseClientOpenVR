@@ -34,12 +34,12 @@ namespace Sly
 
         private void Start()
         {
-            startfunc?.Run(runtimeInstance, gameObject, new SlyParameter[0]);
+            startfunc?.Run(runtimeInstance, gameObject, Array.Empty<SlyParameter>());
         }
 
         private void Update()
         {
-            update?.Run(runtimeInstance, gameObject, new SlyParameter[0]);
+            update?.Run(runtimeInstance, gameObject, Array.Empty<SlyParameter>());
         }
 
         public void hotReload()

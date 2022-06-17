@@ -208,7 +208,7 @@ namespace Openverse.Permissions
             return PermissionState.ASK;
         }
 
-        protected static void SetDefaultPermission(Permission permission, PermissionState state)
+        public static void SetDefaultPermission(Permission permission, PermissionState state)
         {
             userDefaults[permission] = state;
         }
@@ -250,14 +250,14 @@ namespace Openverse.Permissions
             return GetDefaultPermission(permission);
         }
 
-        protected static bool SetServerPermission(Permission permission, PermissionState state)
+        public static bool SetServerPermission(Permission permission, PermissionState state)
         {
             serverPermissions[permission] = state;
             SaveServerPermissions(OpenverseClient.Instance.currentServer);
             return true;
         }
 
-        protected static bool SetServerPermission(string name, Permission permission, PermissionState state)
+        public static bool SetServerPermission(string name, Permission permission, PermissionState state)
         {
             LoadServerPermissions(name);
             serverPermissions[permission] = state;
