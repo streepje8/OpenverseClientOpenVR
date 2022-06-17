@@ -1,19 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
-public class OpenverseClientSettings : ScriptableObject
+//-------------------------------
+//OpenverseClientSettings
+//Stores the openverse client settings
+//
+//Author: streep
+//Creation Date: 12-04-2022
+//--------------------------------
+namespace Openverse.Core
 {
-    public bool isLoggedIn = false;
-    public bool isGuestUser { get
+    using Openverse.Events;
+    using UnityEngine;
+
+    [CreateAssetMenu(fileName = "NewClientSettings", menuName = "Openverse/Settings/Client Settings Profile", order = 100)]
+    public class OpenverseClientSettings : ScriptableObject
+    {
+        public bool isLoggedIn = false;
+        public bool isGuestUser
         {
-            return !isLoggedIn;
+            get
+            {
+                return !isLoggedIn;
+            }
         }
+        public string username { get; private set; }
+        public ushort port;
+        public GameObject clientPrefab;
+        public GameObject playerPrefab;
+        public GameObject localPlayerPrefab;
+        public GameEvent onVirtualWorldStartEvent;
     }
-    public string username { get; private set; }
-    public string startupJoinIP;
-    public ushort port;
-    public GameObject clientPrefab;
-    public GameObject playerPrefab;
-    public GameObject localPlayerPrefab;
 }

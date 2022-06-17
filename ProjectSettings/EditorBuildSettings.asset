@@ -4,8 +4,12 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/BootStrapper.unity
+    guid: 513415af82056104e8aa171f352f746a
   m_configObjects:
+    Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 56a09752afe2a8b43895c0c9fedddfab, type: 2}
     Unity.XR.OpenVR.Settings: {fileID: 11400000, guid: 72a059b19954db84fad42d26a6e6c197, type: 2}
-    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 19b83cf3d3a5e014ea5c378de3f73114, type: 2}
-    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 7f7afc822d7f762498e20ea9717efb34, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: c553831433c5da14c983fb8f766231fe, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: 1a00684f4829e954fa8bfec050948479, type: 2}
