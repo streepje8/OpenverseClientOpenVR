@@ -73,7 +73,7 @@ namespace Openverse.NetCode
             updateServer.Add(lastPOS);
             updateServer.Add(lastRot);
             updateServer.Add(lastScale);
-            OpenverseNetworkClient.Instance.Client.Send(updateServer);
+            OpenverseNetworkClient.Instance.riptideClient.Send(updateServer);
         }
     }
 }

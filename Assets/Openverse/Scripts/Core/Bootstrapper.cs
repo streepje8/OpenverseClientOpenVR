@@ -5,7 +5,7 @@ namespace Openverse.Core
     {
         void Start()
         {
-            OpenverseClient.Instance.connectToNextServer();
+            OpenverseClient.Instance.ConnectTo(OpenverseClient.Instance.userSettings.HomeServerIP);
         }
     }
 }

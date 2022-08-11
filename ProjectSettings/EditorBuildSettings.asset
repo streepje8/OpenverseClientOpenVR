@@ -6,7 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/BootStrapper.unity
+    path: Assets/Scenes/Bootstrapper.unity
+    guid: 8f862eac0eea9124cacce04fb697b7ce
+  - enabled: 1
+    path: Assets/Scenes/ConnectingScreen.unity
     guid: 513415af82056104e8aa171f352f746a
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 56a09752afe2a8b43895c0c9fedddfab, type: 2}

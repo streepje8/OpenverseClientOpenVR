@@ -8,56 +8,70 @@
 namespace Openverse.Core
 {
     using Openverse.Events;
+    using Openverse.NetCode;
     using RiptideNetworking;
     using RiptideNetworking.Utils;
     using System;
+    using System.Collections.Generic;
     using UnityEngine;
     using static Openverse.NetCode.NetworkingCommunications;
 
     public class OpenverseNetworkClient : Singleton<OpenverseNetworkClient>
     {
-        public Client Client { get; private set; }
+        public Client riptideClient { get; private set; }
         public OpenverseClientSettings settings;
         public GameEvent ConnectedEvent;
         public GameEvent ConnectionFailedEvent;
         public GameEvent OtherClientDisconnectedEvent;
         public GameEvent DisconnectedEvent;
         public GameEvent ConnectionStartEvent;
+        public GameEvent ConnectionEndEvent;
         public GameEvent DownloadStartEvent;
         public GameEvent DownloadEndEvent;
+
+        public static Dictionary<Guid, NetworkedObject> NetworkedObjects = new Dictionary<Guid, NetworkedObject>();
 
         private void Awake()
         {
             Instance = this;
             RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
-
-            Client = new Client();
-            Client.Connected += DidConnect;
-            Client.ConnectionFailed += FailedToConnect;
-            Client.ClientDisconnected += PlayerLeft;
-            Client.Disconnected += DidDisconnect;
-        }
-
-        private void FixedUpdate()
-        {
-            Client.Tick();
-        }
-
-        private void OnApplicationQuit()
-        {
-            Client.Disconnect();
-
-            Client.Connected -= DidConnect;
-            Client.ConnectionFailed -= FailedToConnect;
-            Client.ClientDisconnected -= PlayerLeft;
-            Client.Disconnected -= DidDisconnect;
+            riptideClient = new Client();
+            riptideClient.Connected += DidConnect;
+            riptideClient.ConnectionFailed += FailedToConnect;
+            riptideClient.ClientDisconnected += PlayerLeft;
+            riptideClient.Disconnected += DidDisconnect;
         }
 
         public void Connect(string ip, ushort port)
         {
             ConnectionStartEvent?.Raise();
-            Debug.Log("ConnectionEvent");
-            Client.Connect($"{ip}:{port}");
+            riptideClient.Connect($"{ip}:{port}");
+        }
+
+        public void Disconnect()
+        {
+            foreach (KeyValuePair<Guid, NetworkedObject> entry in NetworkedObjects)
+            {
+                Destroy(entry.Value.gameObject);
+            }
+            NetworkedObjects = new Dictionary<Guid, NetworkedObject>();
+            ConnectionEndEvent?.Raise();
+            riptideClient.Disconnect();
+        }
+
+
+        private void FixedUpdate()
+        {
+            riptideClient.Tick();
+        }
+
+        private void OnApplicationQuit()
+        {
+            riptideClient.Disconnect();
+            riptideClient.Connected -= DidConnect;
+            riptideClient.ConnectionFailed -= FailedToConnect;
+            riptideClient.ClientDisconnected -= PlayerLeft;
+            riptideClient.Disconnected -= DidDisconnect;
         }
 
         private void DidConnect(object sender, EventArgs e)
@@ -74,7 +88,7 @@ namespace Openverse.Core
                     message.Add("Guest User");
                 }
             }
-            Client.Send(message);
+            riptideClient.Send(message);
             ConnectedEvent?.Raise();
             Debug.Log("Waiting for server to supply metaverse world...");
             //possibility to start a timer that suggests a disconnect after 60 seconds
@@ -97,6 +111,10 @@ namespace Openverse.Core
 
             foreach (VirtualPlayer player in OpenversePlayer.list.Values)
                 Destroy(player.gameObject);
+        }
+        public void AddObject(Guid id, NetworkedObject obj)
+        {
+            NetworkedObjects.Add(id, obj);
         }
     }
 }

@@ -140,7 +140,7 @@ namespace Openverse.Core
                     inputSupply.Add(false);
                     break;
             }
-            OpenverseNetworkClient.Instance.Client.Send(inputSupply);
+            OpenverseNetworkClient.Instance.riptideClient.Send(inputSupply);
         }
     } 
 }

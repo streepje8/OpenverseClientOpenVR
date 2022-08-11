@@ -25,7 +25,7 @@ namespace Openverse.Core
         public static void Spawn(ushort id, string username, Vector3 position)
         {
             VirtualPlayer player = null;
-            if (!(id == OpenverseNetworkClient.Instance.Client.Id))
+            if (!(id == OpenverseNetworkClient.Instance.riptideClient.Id))
             {
                 player = Instantiate(OpenverseNetworkClient.Instance.settings.playerPrefab, position, Quaternion.identity).GetComponent<VirtualPlayer>();
                 player.name = $"VirtualPlayer {id} ({username})";
@@ -41,7 +41,7 @@ namespace Openverse.Core
 
         public static void SendVRPositions(VirtualPlayer virtualPlayer)
         {
-            if (OpenverseNetworkClient.Instance.Client.IsConnected && virtualPlayer.sendPositions)
+            if (OpenverseNetworkClient.Instance.riptideClient.IsConnected && virtualPlayer.sendPositions)
             {
                 Message message = Message.Create(MessageSendMode.unreliable, ClientToServerId.vrPositions);
                 message.Add(virtualPlayer.head.transform.localPosition);
@@ -50,7 +50,7 @@ namespace Openverse.Core
                 message.Add(virtualPlayer.handLeft.transform.localRotation);
                 message.Add(virtualPlayer.handRight.transform.localPosition);
                 message.Add(virtualPlayer.handRight.transform.localRotation);
-                OpenverseNetworkClient.Instance.Client.Send(message);
+                OpenverseNetworkClient.Instance.riptideClient.Send(message);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Openverse.Core
         private static void UpdateObjectTransform(Message message)
         {
             Guid recieved = Guid.Parse(message.GetString());
-            OpenverseClient.NetworkedObjects.TryGetValue(recieved, out NetworkedObject networkedObject);
+            OpenverseNetworkClient.NetworkedObjects.TryGetValue(recieved, out NetworkedObject networkedObject);
             if (networkedObject != null)
             {
                 networkedObject.transform.position = message.GetVector3();
@@ -101,12 +101,10 @@ namespace Openverse.Core
         [MessageHandler((ushort)ServerToClientId.updateVariable)]
         private static void UpdateVariableOnObject(Message message)
         {
-            //Debug.Log("Changing " + Guid.Parse(message.GetString()).ToString());
-            //Debug.Log("Out of list: " + OpenverseClient.NetworkedObjects.Keys.First().ToString());
             Guid recieved = Guid.Parse(message.GetString());
-            if (OpenverseClient.NetworkedObjects.ContainsKey(recieved))
+            if (OpenverseNetworkClient.NetworkedObjects.ContainsKey(recieved))
             {
-                NetworkedObject obj = OpenverseClient.NetworkedObjects[recieved];
+                NetworkedObject obj = OpenverseNetworkClient.NetworkedObjects[recieved];
                 obj.UpdateVariable(message);
             }
             else
@@ -132,7 +130,7 @@ namespace Openverse.Core
         [MessageHandler((ushort)ServerToClientId.spawnObject)]
         public static void SpawnObject(Message message)
         {
-            OpenverseClient.Instance.spawnNetworkedObject(message);
+            NetworkedObject.Spawn(message);
         }
 
         private static byte[] currentFile = Array.Empty<byte>();
@@ -149,12 +147,12 @@ namespace Openverse.Core
             //Add a timer that goes to 0 when this function is called, and when it hits 60 seconds then cancel the download because the server clearly has failed
             if (!isDownloading)
             {
-                OpenverseClient.Instance.downloadStart();
+                OpenverseNetworkClient.Instance.DownloadStartEvent?.Raise();
                 isDownloading = true;
             }
             string appdata = Application.persistentDataPath;
             currentServer = message.GetString();
-            OpenverseClient.Instance.currentServer = currentServer;
+            OpenverseClient.Instance.currentServer = currentServer; //MAKE SURE TO ADD VERIFICATION FOR THIS IN THE FUTURE!!!!!!
             string foldername = appdata + "/Openverse/Cache/" + currentServer + "/"; //Make sure this is save
             if (!Directory.Exists(foldername))
             {
@@ -162,7 +160,10 @@ namespace Openverse.Core
             }
             if (message.GetBool()) //IsNewFile
             {
-                if (fileHasContents) { File.WriteAllBytes(foldername + currentFileName + ".asset", currentFile); files.Add(foldername + currentFileName + ".asset"); }
+                if (fileHasContents) { 
+                    File.WriteAllBytes(foldername + currentFileName + ".asset", currentFile); 
+                    files.Add(foldername + currentFileName + ".asset");
+                }
                 currentFileName = message.GetString();
                 Debug.Log("Saving new file to:" + foldername + currentFileName);
                 currentFile = Array.Empty<byte>();
@@ -181,7 +182,7 @@ namespace Openverse.Core
         {
             isDownloading = false;
             PermissionManager.Instance.LoadServerPermissions(currentServer);
-            OpenverseClient.Instance.openWorld(files);
+            OpenverseClient.Instance.loader.LoadWorld(files);
         }
 
 
