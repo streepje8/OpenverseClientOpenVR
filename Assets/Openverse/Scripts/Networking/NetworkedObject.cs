@@ -186,7 +186,7 @@ namespace Openverse.NetCode
             }
         }
 
-        private static object ExtractType(object v, Type type)
+        private static object? ExtractType(object v, Type type)
         {
             if (v != null)
             {
