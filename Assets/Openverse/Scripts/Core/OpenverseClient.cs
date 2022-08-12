@@ -5,15 +5,11 @@
 //Author: streep
 //Creation Date: 12-04-2022
 //--------------------------------
-
 namespace Openverse.Core
 {
     using Openverse.Input;
-    using Openverse.NetCode;
     using Openverse.SupportSystems;
-    using RiptideNetworking;
     using System;
-    using System.Collections.Generic;
     using UnityEditor;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -31,9 +27,8 @@ namespace Openverse.Core
             private set;
         }
 
-        //Settings Related
         public OpenverseClientSettings settings;
-        public SettingsManager<UserSettings> userSettingsManager { get; private set; } = new SettingsManager<UserSettings>();
+        public SettingsManager<UserSettings> userSettingsManager { get; private set; } = new SettingsManager<UserSettings>("UserSettings");
         
         public UserSettings userSettings
         {
@@ -42,7 +37,7 @@ namespace Openverse.Core
                 return userSettingsManager.GetSettings();
             }
         }
-        
+
         void Awake()
         {
             Instance = this;
@@ -62,12 +57,12 @@ namespace Openverse.Core
                     networkClient.settings = settings;
                     networkClient.riptideClient.Connected += (object sender, EventArgs e) => { isConnected = true; };
                     networkClient.riptideClient.Disconnected += (object sender, EventArgs e) => { isConnected = false; };
+                    DontDestroyOnLoad(networkClient);
                 }
 
                 if (isConnected) networkClient.Disconnect();
-                SceneManager.LoadScene(1);
-                networkClient.Connect(IP, settings.port);
-                DontDestroyOnLoad(networkClient);
+                AsyncOperation operation = SceneManager.LoadSceneAsync(1);
+                operation.completed += (AsyncOperation o) => { networkClient.Connect(IP, settings.port); };
             } else
             {
                 Debug.LogError("User not logged in!");

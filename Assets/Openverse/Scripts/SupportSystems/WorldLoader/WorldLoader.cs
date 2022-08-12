@@ -1,16 +1,23 @@
-using Openverse.Core;
-using Openverse.Data;
-using RiptideNetworking;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading.Tasks;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using static Openverse.NetCode.NetworkingCommunications;
-
+//-------------------------------
+//Worldloader
+//This script is responsible for recieving and loading worlds
+//
+//Author: streep
+//Creation Date: 12-08-2022
+//--------------------------------
 namespace Openverse.SupportSystems
 {
+    using Openverse.Core;
+    using Openverse.Data;
+    using Openverse.Permissions;
+    using RiptideNetworking;
+    using System;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Threading.Tasks;
+    using UnityEngine;
+    using UnityEngine.SceneManagement;
+    using static Openverse.NetCode.NetworkingCommunications;
     public class WorldLoader
     {
         private AssetBundle clientAssets;
@@ -88,6 +95,58 @@ namespace Openverse.SupportSystems
         public object LoadAsset(UnityEngine.Object foundAsset)
         {
             return clientAssets.LoadAsset(foundAsset.name);
+        }
+
+        private static byte[] currentFile = Array.Empty<byte>();
+        private static string currentFileName = "";
+        private static bool fileHasContents = false;
+        public static string currentServer;
+        public static bool isDownloading = false;
+        public static List<string> files = new List<string>();
+
+        [MessageHandler((ushort)ServerToClientId.downloadWorld)]
+        private static void RecieveWorld(Message message)
+        {
+            //Add a timer that goes to 0 when this function is called, and when it hits 60 seconds then cancel the download because the server clearly has failed
+            if (!isDownloading)
+            {
+                OpenverseNetworkClient.Instance.DownloadStartEvent?.Raise();
+                isDownloading = true;
+            }
+            string appdata = Application.persistentDataPath;
+            currentServer = message.GetString();
+            OpenverseClient.Instance.currentServer = currentServer; //MAKE SURE TO ADD VERIFICATION FOR THIS IN THE FUTURE!!!!!!
+            string foldername = appdata + "/Openverse/Cache/" + currentServer + "/"; //Make sure this is save
+            if (!Directory.Exists(foldername))
+            {
+                Directory.CreateDirectory(foldername);
+            }
+            if (message.GetBool()) //IsNewFile
+            {
+                if (fileHasContents)
+                {
+                    File.WriteAllBytes(foldername + currentFileName + ".asset", currentFile);
+                    files.Add(foldername + currentFileName + ".asset");
+                }
+                currentFileName = message.GetString();
+                Debug.Log("Saving new file to:" + foldername + currentFileName);
+                currentFile = Array.Empty<byte>();
+                fileHasContents = false;
+            }
+            else
+            {
+                byte[] filebytes = message.GetBytes(true);
+                currentFile = Util.MergeArrays(currentFile, filebytes);
+                fileHasContents = true;
+            }
+        }
+
+        [MessageHandler((ushort)ServerToClientId.openWorld)]
+        private static void OpenWorld(Message message)
+        {
+            isDownloading = false;
+            PermissionManager.Instance.LoadServerPermissions(currentServer);
+            OpenverseClient.Instance.loader.LoadWorld(files);
         }
     }
 }

@@ -1,19 +1,29 @@
-using Newtonsoft.Json;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using UnityEngine;
+//-------------------------------
+//SettingsManager
+//This script is responsible for handeling user settings stored in structs
+//
+//Author: streep
+//Creation Date: 12-08-2022
+//--------------------------------
 namespace Openverse.SupportSystems
 {
+    using Newtonsoft.Json;
+    using System.IO;
+    using UnityEngine;
 
     public class SettingsManager<T>
     {
         private T settings;
+        private string filename;
+
+        public SettingsManager(string filename)
+        {
+            this.filename = filename;
+        }
 
         public void Load()
         {
-            string fileLoc = Application.persistentDataPath + "/Openverse/UserData/UserSettings.json";
+            string fileLoc = Application.persistentDataPath + "/Openverse/UserData/" + filename + ".json";
             if (File.Exists(fileLoc))
             {
                 string fileContents = File.ReadAllText(fileLoc);
@@ -27,7 +37,7 @@ namespace Openverse.SupportSystems
 
         public void Save()
         {
-            string fileLoc = Application.persistentDataPath + "/Openverse/UserData/UserSettings.json";
+            string fileLoc = Application.persistentDataPath + "/Openverse/UserData/" + filename + ".json";
             string jsonString = JsonConvert.SerializeObject(settings, Formatting.Indented);
             if (!File.Exists(fileLoc))
             {

@@ -186,6 +186,7 @@ namespace Openverse.NetCode
             }
         }
 
+#nullable enable
         private static object? ExtractType(object v, Type type)
         {
             if (v != null)
@@ -209,7 +210,7 @@ namespace Openverse.NetCode
             return null;
         }
     }
-
+#nullable disable
     public class PropertyAssignment
     {
         public bool isPrimitive = true;

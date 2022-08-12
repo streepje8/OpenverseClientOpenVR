@@ -7,6 +7,7 @@
 //--------------------------------
 namespace Openverse.Core
 {
+    using Openverse.NetCode;
     using Openverse.Permissions;
     using UnityEngine;
 

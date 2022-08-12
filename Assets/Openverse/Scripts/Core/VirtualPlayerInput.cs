@@ -76,6 +76,11 @@ namespace Openverse.Core
             {4, typeof(Quaternion)}
         };
 
+        [MessageHandler((ushort)ServerToClientId.RequestInput)]
+        private static void OnInputRequest(Message message)
+        {
+            OpenverseClient.Instance?.player?.input?.OnRequestInput(message);
+        }
         internal void OnRequestInput(Message message)
         {
             short type = message.GetShort();
