@@ -24,7 +24,7 @@ namespace Openverse.NetCode
         public static void RemoveComponent(Message message)
         {
             Guid id = Guid.Parse(message.GetString());
-            OpenverseClient.NetworkedObjects.TryGetValue(id, out NetworkedObject obj);
+            OpenverseNetworkClient.NetworkedObjects.TryGetValue(id, out NetworkedObject obj);
             if (obj != null)
             {
                 string compType = message.GetString();
@@ -38,7 +38,7 @@ namespace Openverse.NetCode
         public static void AddComponent(Message message)
         {
             Guid id = Guid.Parse(message.GetString());
-            OpenverseClient.NetworkedObjects.TryGetValue(id, out NetworkedObject obj);
+            OpenverseNetworkClient.NetworkedObjects.TryGetValue(id, out NetworkedObject obj);
             if (obj != null)
             {
                 int index = message.GetInt();
@@ -87,7 +87,7 @@ namespace Openverse.NetCode
                             case 7:
                                 UnityEngine.Object foundAsset = null;
                                 string name = message.GetString();
-                                foreach (UnityEngine.Object uobj in OpenverseClient.Instance.allClientAssets)
+                                foreach (UnityEngine.Object uobj in OpenverseClient.Instance.loader.allClientAssets)
                                 {
                                     if (name == uobj.name)
                                     {
@@ -96,7 +96,7 @@ namespace Openverse.NetCode
                                 }
                                 if (foundAsset != null)
                                 {
-                                    properties.Add(varname, new PropertyAssignment(OpenverseClient.Instance.LoadAsset(foundAsset), false));
+                                    properties.Add(varname, new PropertyAssignment(OpenverseClient.Instance.loader.LoadAsset(foundAsset), false));
                                 }
                                 else
                                 {
@@ -152,7 +152,7 @@ namespace Openverse.NetCode
             obj.transform.rotation = message.GetQuaternion();
             obj.transform.localScale = message.GetVector3();
             obj.gameObject.name = "(Networked Object) " + message.GetString();
-            OpenverseClient.Instance.AddObject(id, obj);
+            OpenverseClient.Instance.networkClient.AddObject(id, obj);
         }
 
         public void UpdateVariable(Message msg)
@@ -186,7 +186,8 @@ namespace Openverse.NetCode
             }
         }
 
-        private static object ExtractType(object v, Type type)
+#nullable enable
+        private static object? ExtractType(object v, Type type)
         {
             if (v != null)
             {
@@ -209,7 +210,7 @@ namespace Openverse.NetCode
             return null;
         }
     }
-
+#nullable disable
     public class PropertyAssignment
     {
         public bool isPrimitive = true;

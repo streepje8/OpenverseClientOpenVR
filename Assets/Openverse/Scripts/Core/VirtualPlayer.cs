@@ -7,6 +7,7 @@
 //--------------------------------
 namespace Openverse.Core
 {
+    using Openverse.NetCode;
     using Openverse.Permissions;
     using UnityEngine;
 
@@ -50,7 +51,7 @@ namespace Openverse.Core
         {
             transform.position = newPosition;
 
-            if (id != OpenverseNetworkClient.Instance.Client.Id) // Don't overwrite local player's forward direction to avoid noticeable rotational snapping
+            if (id != OpenverseNetworkClient.Instance.riptideClient.Id) // Don't overwrite local player's forward direction to avoid noticeable rotational snapping
                 transform.forward = forward;
         }
 
