@@ -30,6 +30,7 @@ namespace Openverse.SupportSystems
             AssetBundle sceneAssets = null;
             foreach (string file in files)
             {
+                Debug.Log("Loading file: " + file);
                 var loadedAssetBundle = AssetBundle.LoadFromFile(file);
                 if (loadedAssetBundle == null)
                 {
@@ -126,7 +127,15 @@ namespace Openverse.SupportSystems
                 if (fileHasContents)
                 {
                     File.WriteAllBytes(foldername + currentFileName + ".asset", currentFile);
-                    files.Add(foldername + currentFileName + ".asset");
+                    string filename = foldername + currentFileName + ".asset";
+                    if (!files.Contains(filename))
+                    {
+                        files.Add(filename);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Recieved duplicate file, file ignored: " + filename);
+                    }
                 }
                 currentFileName = message.GetString();
                 Debug.Log("Saving new file to:" + foldername + currentFileName);

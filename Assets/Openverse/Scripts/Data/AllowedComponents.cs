@@ -16,44 +16,56 @@ namespace Openverse.Data
     public class AllowedComponents : MonoBehaviour
     {
         public static HashSet<Type> allowedTypes = new HashSet<Type>()
-    {
-        typeof(Transform),
-        typeof(MeshRenderer),
-        typeof(MeshFilter),
-        typeof(MeshCollider),
-        typeof(BoxCollider),
-        typeof(SphereCollider),
-        typeof(CapsuleCollider),
-        typeof(TerrainCollider),
-        typeof(Light),
-        typeof(PostProcessVolume),
-        typeof(PostProcessLayer),
-        typeof(PostProcessProfile),
-        typeof(PostProcessEffectSettings),
-        typeof(ParticleSystem),
-        typeof(Rigidbody),
-        typeof(ClientMoveable)
-    };
+        {
+            //Unity
+            typeof(Transform),
+            typeof(MeshRenderer),
+            typeof(MeshFilter),
+            typeof(MeshCollider),
+            typeof(BoxCollider),
+            typeof(SphereCollider),
+            typeof(CapsuleCollider),
+            typeof(TerrainCollider),
+            typeof(Light),
+
+            //Post Processing
+            typeof(PostProcessVolume),
+            typeof(PostProcessLayer),
+            typeof(PostProcessProfile),
+            typeof(PostProcessEffectSettings),
+            typeof(ParticleSystem),
+            typeof(Rigidbody),
+
+            //Openverse
+            typeof(ClientMoveable),
+            typeof(NetworkedObject)
+        };
 
         public static List<Type> allowedTypesList = new List<Type>()
-    {
-        typeof(Transform),
-        typeof(MeshRenderer),
-        typeof(MeshFilter),
-        typeof(MeshCollider),
-        typeof(BoxCollider),
-        typeof(SphereCollider),
-        typeof(CapsuleCollider),
-        typeof(TerrainCollider),
-        typeof(Light),
-        typeof(PostProcessVolume),
-        typeof(PostProcessLayer),
-        typeof(PostProcessProfile),
-        typeof(PostProcessEffectSettings),
-        typeof(ParticleSystem),
-        typeof(Rigidbody),
-        typeof(ClientMoveable)
-    };
+        {
+            //Unity
+            typeof(Transform),
+            typeof(MeshRenderer),
+            typeof(MeshFilter),
+            typeof(MeshCollider),
+            typeof(BoxCollider),
+            typeof(SphereCollider),
+            typeof(CapsuleCollider),
+            typeof(TerrainCollider),
+            typeof(Light),
+
+            //Post Processing
+            typeof(PostProcessVolume),
+            typeof(PostProcessLayer),
+            typeof(PostProcessProfile),
+            typeof(PostProcessEffectSettings),
+            typeof(ParticleSystem),
+            typeof(Rigidbody),
+
+            //Openverse
+            typeof(ClientMoveable),
+            typeof(NetworkedObject)
+        };
 
         public static void ScanAndRemoveInvalidScripts(GameObject go)
         {
@@ -64,10 +76,13 @@ namespace Openverse.Data
             Component[] components = go.GetComponents<Component>();
             for (int i = 0; i < components.Length; i++)
             {
-                if (components[i] != null && !allowedTypes.Contains(components[i].GetType()))
+                if (components[i] != null)
                 {
-                    Destroy(components[i]);
-                    Debug.LogWarning("Removed component of type " + components[i].GetType() + ". This component type is not allowed!");
+                    if (!allowedTypes.Contains(components[i].GetType()))
+                    {
+                        DestroyImmediate(components[i]);
+                        Debug.LogWarning("Removed component of type " + components[i].GetType() + ". This component type is not allowed!");
+                    }
                 }
             }
         }
