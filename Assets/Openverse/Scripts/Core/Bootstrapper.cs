@@ -12,7 +12,12 @@ namespace Openverse.Core
     {
         void Start()
         {
-            OpenverseClient.Instance.ConnectTo(OpenverseClient.Instance.userSettings.HomeServerIP);
+            Debug.Log("(BOOTLOADER) Requesting home server info...");
+            OpenverseServerInfoResponse homeServer =
+                OpenverseClient.Instance.GetServerInfo(OpenverseClient.Instance.userSettings.HomeServerIP);
+            Debug.Log("(BOOTLOADER) Connecting to server: " + homeServer.OpenverseServerName);
+            Debug.Log("(BOOTLOADER) Handing control over to the client.");
+            OpenverseClient.Instance.ConnectTo(homeServer);
         }
     }
 }

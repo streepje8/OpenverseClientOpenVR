@@ -5,6 +5,11 @@
 //Author: streep
 //Creation Date: 12-04-2022
 //--------------------------------
+
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using Newtonsoft.Json;
+
 namespace Openverse.Core
 {
     using Openverse.Input;
@@ -14,6 +19,18 @@ namespace Openverse.Core
     using UnityEngine;
     using UnityEngine.SceneManagement;
 
+    [Serializable]
+    [SuppressMessage("ReSharper", "InconsistentNaming")]
+    public struct OpenverseServerInfoResponse
+    {
+        public string OpenverseServerName;
+        public ushort OpenverseServerPort;
+        public string OpenverseServerIP; //This field is client filled!
+        public string ProtocolVersion;
+        public string IconURL;
+        public string Description;
+    }
+    
     public class OpenverseClient : Singleton<OpenverseClient>
     {
         public VirtualPlayer player;
@@ -47,7 +64,16 @@ namespace Openverse.Core
             userSettingsManager.Load();
         }
 
-        public void ConnectTo(string IP)
+        public OpenverseServerInfoResponse GetServerInfo(string IP)
+        {
+            using WebClient wc = new WebClient();
+            var json = wc.DownloadString(GetWebAdress(IP));
+            OpenverseServerInfoResponse response = JsonConvert.DeserializeObject<OpenverseServerInfoResponse>(json);
+            response.OpenverseServerIP = IP;
+            return response;
+        }
+        
+        public void ConnectTo(OpenverseServerInfoResponse homeResponse)
         {
             if (settings.isLoggedIn || settings.isGuestUser)
             {
@@ -59,10 +85,9 @@ namespace Openverse.Core
                     networkClient.riptideClient.Disconnected += (object sender, EventArgs e) => { isConnected = false; };
                     DontDestroyOnLoad(networkClient);
                 }
-
                 if (isConnected) networkClient.Disconnect();
                 AsyncOperation operation = SceneManager.LoadSceneAsync(1);
-                operation.completed += (AsyncOperation o) => { networkClient.Connect(IP, settings.port); };
+                operation.completed += (AsyncOperation o) => { networkClient.Connect(homeResponse); };
             } else
             {
                 Debug.LogError("User not logged in!");
@@ -81,6 +106,11 @@ namespace Openverse.Core
             }                
         }
 
+        public static string GetWebAdress(string IP)
+        {
+            return "http://" + IP.Replace("127.0.0.1", "localhost" + ":8080");
+        }
+        
         #region EDITOR_CODE
         #if UNITY_EDITOR
                 public void OnValidate()

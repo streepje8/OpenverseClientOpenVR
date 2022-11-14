@@ -42,10 +42,16 @@ namespace Openverse.Core
             riptideClient.Disconnected += DidDisconnect;
         }
 
-        public void Connect(string ip, ushort port)
+        public void Connect(OpenverseServerInfoResponse serverInfo)
         {
+            //Download the content
+            Debug.Log("(NetworkClient) Downloading/Updating Content...");
+            //Good luck to future me on adding hash checking and file downloading here.
+            
+            //When its done run this code. Also make sure not to block the thread from this function cuz its will lock the game
+            Debug.Log("(NetworkClient) Starting Openverse connection!");
             ConnectionStartEvent?.Raise();
-            riptideClient.Connect($"{ip}:{port}");
+            riptideClient.Connect($"{serverInfo.OpenverseServerIP}:{serverInfo.OpenverseServerPort}"); //Even more good luck on removing the downloading from the game networking!
         }
 
         public void Disconnect()
