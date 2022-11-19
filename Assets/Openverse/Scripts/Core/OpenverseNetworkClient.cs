@@ -5,6 +5,10 @@
 //Author: streep
 //Creation Date: 12-04-2022
 //--------------------------------
+
+using System.Net.Http;
+using Openverse.SupportSystems;
+
 namespace Openverse.Core
 {
     using Openverse.Events;
@@ -46,6 +50,16 @@ namespace Openverse.Core
         {
             //Download the content
             Debug.Log("(NetworkClient) Downloading/Updating Content...");
+            using HttpClient client = new HttpClient();
+            string rootURL = OpenverseClient.GetWebAdress(serverInfo.OpenverseServerIP);
+            string appdata = Application.persistentDataPath;
+            OpenverseClient.Instance.currentServer = serverInfo.OpenverseServerName; //MAKE SURE TO ADD VERIFICATION FOR THIS IN THE FUTURE!!!!!!
+            string foldername = appdata + "/Openverse/Cache/" + serverInfo.OpenverseServerName + "/";
+            
+            //TODO CONTINUE FROM HERE
+            AssetLoader.DownloadFilesAsync(new Dictionary<Uri, string>(){
+                { new Uri(rootURL + ""), foldername + ""}
+            },client);
             //Good luck to future me on adding hash checking and file downloading here.
             
             //When its done run this code. Also make sure not to block the thread from this function cuz its will lock the game
