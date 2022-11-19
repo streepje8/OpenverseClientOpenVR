@@ -8,6 +8,8 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Openverse.Core
@@ -49,10 +51,7 @@ namespace Openverse.Core
         
         public UserSettings userSettings
         {
-            get
-            {
-                return userSettingsManager.GetSettings();
-            }
+            get => userSettingsManager.GetSettings();
         }
 
         void Awake()
@@ -66,11 +65,18 @@ namespace Openverse.Core
 
         public OpenverseServerInfoResponse GetServerInfo(string IP)
         {
-            using WebClient wc = new WebClient();
-            var json = wc.DownloadString(GetWebAdress(IP));
-            OpenverseServerInfoResponse response = JsonConvert.DeserializeObject<OpenverseServerInfoResponse>(json);
-            response.OpenverseServerIP = IP;
-            return response;
+            return GetInfoAsync(IP);
+        }
+
+        private OpenverseServerInfoResponse GetInfoAsync(string IP)
+        {
+            HttpClient client = new HttpClient();
+            using HttpResponseMessage response = client.GetAsync(GetWebAdress(IP)).Result; //Idk why im using async here tbh
+            using HttpContent content = response.Content;
+            var json = content.ReadAsStringAsync().Result; //Same for this
+            OpenverseServerInfoResponse reply = JsonConvert.DeserializeObject<OpenverseServerInfoResponse>(json);
+            reply.OpenverseServerIP = IP;
+            return reply;
         }
         
         public void ConnectTo(OpenverseServerInfoResponse homeResponse)
@@ -81,13 +87,13 @@ namespace Openverse.Core
                 {
                     networkClient = Instantiate(settings.clientPrefab).GetComponent<OpenverseNetworkClient>();
                     networkClient.settings = settings;
-                    networkClient.riptideClient.Connected += (object sender, EventArgs e) => { isConnected = true; };
-                    networkClient.riptideClient.Disconnected += (object sender, EventArgs e) => { isConnected = false; };
+                    networkClient.riptideClient.Connected += (object sender, EventArgs e) => isConnected = true;
+                    networkClient.riptideClient.Disconnected += (object sender, EventArgs e) => isConnected = false;
                     DontDestroyOnLoad(networkClient);
                 }
                 if (isConnected) networkClient.Disconnect();
                 AsyncOperation operation = SceneManager.LoadSceneAsync(1);
-                operation.completed += (AsyncOperation o) => { networkClient.Connect(homeResponse); };
+                operation.completed += (AsyncOperation o) => networkClient.Connect(homeResponse);
             } else
             {
                 Debug.LogError("User not logged in!");
