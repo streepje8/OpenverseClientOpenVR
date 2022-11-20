@@ -52,10 +52,10 @@ namespace Openverse.SupportSystems
                     sceneAssets = loadedAssetBundle;
                 }
             }
-            _ = EnterOpenverseWorld(sceneBundle, clientAssets, sceneAssets);
+            _ = EnterOpenverseWorldAsync(sceneBundle, clientAssets, sceneAssets);
         }
 
-        private async Task EnterOpenverseWorld(AssetBundle sceneBundle, AssetBundle clientAssets, AssetBundle sceneAssets)
+        private async Task EnterOpenverseWorldAsync(AssetBundle sceneBundle, AssetBundle clientAssets, AssetBundle sceneAssets)
         {
             AsyncOperation asyncLoad = clientAssets.LoadAllAssetsAsync();
 

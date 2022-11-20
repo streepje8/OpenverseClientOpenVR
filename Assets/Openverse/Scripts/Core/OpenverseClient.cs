@@ -81,11 +81,13 @@ namespace Openverse.Core
                 reply.OpenverseServerIP = IP;
                 return reply;
             }
-            catch (Exception e)
+            catch (Exception e) //skipcq
             {
                 Debug.LogException(e);
-                OpenverseServerInfoResponse reply = new OpenverseServerInfoResponse();
-                reply.OpenverseServerName = "SERVER_CONNECTION_FAILED";
+                OpenverseServerInfoResponse reply = new OpenverseServerInfoResponse()
+                {
+                    OpenverseServerName = "SERVER_CONNECTION_FAILED"
+                };
                 return reply;
             }
         }

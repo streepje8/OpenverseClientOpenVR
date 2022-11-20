@@ -85,7 +85,7 @@ namespace Openverse.Core
             using HttpContent content = response.Content;
             string json = content.ReadAsStringAsync().Result; //Same for this
             FileHashes reply = JsonConvert.DeserializeObject<FileHashes>(json);
-            FileHashes localHashes;
+            FileHashes localHashes; //skipcq
             if (File.Exists(hasesfile))
             {
                 string jsonLocal = File.ReadAllText(hasesfile);
@@ -123,10 +123,7 @@ namespace Openverse.Core
                 {
                     if (File.Exists(fileGoal.Values.ToList()[i]))
                     {
-                        if (File.Exists(fileGoal.Values.ToList()[i]))
-                        {
-                            File.Delete(fileGoal.Values.ToList()[i]); //File is going to be redownloaded so discard our current.
-                        }
+                        File.Delete(fileGoal.Values.ToList()[i]); //File is going to be redownloaded so discard our current.
                     }
                 }
             }
