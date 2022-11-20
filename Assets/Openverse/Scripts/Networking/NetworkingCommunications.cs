@@ -12,12 +12,9 @@ namespace Openverse.NetCode
     {
         public enum ServerToClientId : ushort
         {
-            downloadWorld = 1,
-            openWorld,
-            spawnPlayer,
+            spawnPlayer = 1,
             playerLocation,
             spawnObject,
-            updateObject,
             updateVariable,
             transformObject,
             addComponent,

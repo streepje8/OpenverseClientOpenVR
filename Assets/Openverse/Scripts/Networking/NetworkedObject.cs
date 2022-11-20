@@ -146,7 +146,8 @@ namespace Openverse.NetCode
 
         public static void Spawn(Message message)
         {
-            Guid id = Guid.Parse(message.GetString());
+            string guid = message.GetString();
+            Guid id = Guid.Parse(guid);
             NetworkedObject obj = new GameObject().AddComponent<NetworkedObject>();
             obj.transform.position = message.GetVector3();
             obj.transform.rotation = message.GetQuaternion();

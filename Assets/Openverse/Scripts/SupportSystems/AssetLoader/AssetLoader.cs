@@ -10,7 +10,7 @@ namespace Openverse.SupportSystems
     public class AssetLoader
     {
 
-        public static async Task DownloadFilesAsync(Dictionary<Uri, string> files, HttpClient client)
+        public static async Task DownloadFilesAsync(Dictionary<Uri, string> files, HttpClient client = null)
         {
             foreach (KeyValuePair<Uri,string> UriName in files)
             {

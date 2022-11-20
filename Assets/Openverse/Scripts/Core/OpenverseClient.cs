@@ -70,13 +70,24 @@ namespace Openverse.Core
 
         private OpenverseServerInfoResponse GetInfoAsync(string IP)
         {
-            HttpClient client = new HttpClient();
-            using HttpResponseMessage response = client.GetAsync(GetWebAdress(IP)).Result; //Idk why im using async here tbh
-            using HttpContent content = response.Content;
-            var json = content.ReadAsStringAsync().Result; //Same for this
-            OpenverseServerInfoResponse reply = JsonConvert.DeserializeObject<OpenverseServerInfoResponse>(json);
-            reply.OpenverseServerIP = IP;
-            return reply;
+            try
+            {
+                HttpClient client = new HttpClient();
+                using HttpResponseMessage
+                    response = client.GetAsync(GetWebAdress(IP)).Result; //Idk why im using async here tbh
+                using HttpContent content = response.Content;
+                var json = content.ReadAsStringAsync().Result; //Same for this
+                OpenverseServerInfoResponse reply = JsonConvert.DeserializeObject<OpenverseServerInfoResponse>(json);
+                reply.OpenverseServerIP = IP;
+                return reply;
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+                OpenverseServerInfoResponse reply = new OpenverseServerInfoResponse();
+                reply.OpenverseServerName = "SERVER_CONNECTION_FAILED";
+                return reply;
+            }
         }
         
         public void ConnectTo(OpenverseServerInfoResponse homeResponse)
