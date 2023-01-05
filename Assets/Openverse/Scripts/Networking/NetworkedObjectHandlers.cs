@@ -11,7 +11,7 @@ namespace Openverse.NetCode
     using RiptideNetworking;
     using System;
     using UnityEngine;
-    using static Openverse.NetCode.NetworkingCommunications;
+
     public class NetworkedObjectHandlers
     {
         [MessageHandler((ushort)ServerToClientId.spawnObject)]

@@ -9,7 +9,6 @@ namespace Openverse.Input
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using UnityEngine;
     using UnityEngine.XR;
 

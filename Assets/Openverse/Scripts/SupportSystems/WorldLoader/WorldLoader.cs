@@ -9,7 +9,7 @@ namespace Openverse.SupportSystems
 {
     using Openverse.Core;
     using Openverse.Data;
-    using Openverse.Permissions;
+    using Openverse.NetCode;
     using RiptideNetworking;
     using System;
     using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace Openverse.SupportSystems
     using System.Threading.Tasks;
     using UnityEngine;
     using UnityEngine.SceneManagement;
-    using static Openverse.NetCode.NetworkingCommunications;
+
     public class WorldLoader
     {
         private AssetBundle clientAssets;

@@ -1,6 +1,6 @@
 // ----- AUTO GENERATED CODE ----- //
 using System;
-using UnityEngine;
+
 namespace Openverse.Variables
 {
     [Serializable]

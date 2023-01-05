@@ -87,7 +87,7 @@ namespace Openverse.NetCode
                             case 7:
                                 UnityEngine.Object foundAsset = null;
                                 string name = message.GetString();
-                                foreach (UnityEngine.Object uobj in OpenverseClient.Instance.loader.allClientAssets)
+                                foreach (UnityEngine.Object uobj in OpenverseClient.Instance.Loader.allClientAssets)
                                 {
                                     if (name == uobj.name)
                                     {
@@ -96,7 +96,7 @@ namespace Openverse.NetCode
                                 }
                                 if (foundAsset != null)
                                 {
-                                    properties.Add(varname, new PropertyAssignment(OpenverseClient.Instance.loader.LoadAsset(foundAsset), false));
+                                    properties.Add(varname, new PropertyAssignment(OpenverseClient.Instance.Loader.LoadAsset(foundAsset), false));
                                 }
                                 else
                                 {
@@ -153,7 +153,7 @@ namespace Openverse.NetCode
             obj.transform.rotation = message.GetQuaternion();
             obj.transform.localScale = message.GetVector3();
             obj.gameObject.name = "(Networked Object) " + message.GetString();
-            OpenverseClient.Instance.networkClient.AddObject(id, obj);
+            OpenverseClient.Instance.NetworkClient.AddObject(id, obj);
         }
 
         public void UpdateVariable(Message msg)

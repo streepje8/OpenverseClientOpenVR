@@ -12,7 +12,6 @@ namespace Openverse.NetCode
     using System;
     using System.Collections.Generic;
     using UnityEngine;
-    using static NetworkingCommunications;
 
     public class ClientMoveable : MonoBehaviour
     {

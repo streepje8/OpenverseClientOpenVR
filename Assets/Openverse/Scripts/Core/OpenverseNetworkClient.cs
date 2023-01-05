@@ -23,7 +23,6 @@ namespace Openverse.Core
     using System;
     using System.Collections.Generic;
     using UnityEngine;
-    using static Openverse.NetCode.NetworkingCommunications;
 
     public class OpenverseNetworkClient : Singleton<OpenverseNetworkClient>
     {
@@ -73,7 +72,7 @@ namespace Openverse.Core
             DownloadStartEvent?.Raise();
             string rootURL = OpenverseClient.GetWebAdress(serverInfo.OpenverseServerIP);
             string appdata = Application.persistentDataPath;
-            OpenverseClient.Instance.currentServer = serverInfo.OpenverseServerName; //MAKE SURE TO ADD VERIFICATION FOR THIS IN THE FUTURE!!!!!!
+            OpenverseClient.Instance.CurrentServer = serverInfo.OpenverseServerName; //MAKE SURE TO ADD VERIFICATION FOR THIS IN THE FUTURE!!!!!!
             string foldername = appdata + "/Openverse/Cache/" + serverInfo.OpenverseServerName + "/";
             if (!Directory.Exists(foldername))
             {
@@ -81,7 +80,7 @@ namespace Openverse.Core
             }
             string hasesfile = foldername + "hashes.json";
             using HttpClient client = new HttpClient();
-            using HttpResponseMessage response = client.GetAsync(rootURL + "/hashes").Result; //Idk why im using async here tbh
+            using HttpResponseMessage response = client.GetAsync(rootURL + "/hashes").Result; //Does this need to be async?
             using HttpContent content = response.Content;
             string json = content.ReadAsStringAsync().Result; //Same for this
             FileHashes reply = JsonConvert.DeserializeObject<FileHashes>(json);
@@ -189,8 +188,8 @@ namespace Openverse.Core
             }
             riptideClient.Send(message);
             string appdata = Application.persistentDataPath;
-            string foldername = appdata + "/Openverse/Cache/" + OpenverseClient.Instance.currentServer + "/";
-            OpenverseClient.Instance.loader.LoadWorld(new List<string>
+            string foldername = appdata + "/Openverse/Cache/" + OpenverseClient.Instance.CurrentServer + "/";
+            OpenverseClient.Instance.Loader.LoadWorld(new List<string>
             {
                 foldername + "ClientAssets.asset",
                 foldername + "ClientScene.asset",

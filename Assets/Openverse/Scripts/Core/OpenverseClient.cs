@@ -7,9 +7,7 @@
 //--------------------------------
 
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using System.Net.Http;
-using System.Threading.Tasks;
 using Newtonsoft.Json;
 
 namespace Openverse.Core
@@ -36,22 +34,22 @@ namespace Openverse.Core
     public class OpenverseClient : Singleton<OpenverseClient>
     {
         public VirtualPlayer player;
-        public OpenverseNetworkClient networkClient { get; private set; }
-        public WorldLoader loader { get; private set; } = new WorldLoader();
-        public string currentServer { get; internal set; }
+        public OpenverseNetworkClient NetworkClient { get; private set; }
+        public WorldLoader Loader { get; private set; } = new WorldLoader();
+        public string CurrentServer { get; internal set; }
 
-        public bool isConnected
+        public bool IsConnected
         {
             get;
             private set;
         }
 
         public OpenverseClientSettings settings;
-        public SettingsManager<UserSettings> userSettingsManager { get; private set; } = new SettingsManager<UserSettings>("UserSettings");
+        public SettingsManager<UserSettings> UserSettingsManager { get; private set; } = new SettingsManager<UserSettings>("UserSettings");
         
         public UserSettings userSettings
         {
-            get => userSettingsManager.GetSettings();
+            get => UserSettingsManager.GetSettings();
         }
 
         void Awake()
@@ -60,7 +58,7 @@ namespace Openverse.Core
             DontDestroyOnLoad(gameObject);
 
             //Start internal systems
-            userSettingsManager.Load();
+            UserSettingsManager.Load();
         }
 
         public OpenverseServerInfoResponse GetServerInfo(string IP)
@@ -96,17 +94,18 @@ namespace Openverse.Core
         {
             if (settings.isLoggedIn || settings.isGuestUser)
             {
-                if (networkClient == null)
+                if (NetworkClient == null)
                 {
-                    networkClient = Instantiate(settings.clientPrefab).GetComponent<OpenverseNetworkClient>();
-                    networkClient.settings = settings;
-                    networkClient.riptideClient.Connected += (object sender, EventArgs e) => isConnected = true;
-                    networkClient.riptideClient.Disconnected += (object sender, EventArgs e) => isConnected = false;
-                    DontDestroyOnLoad(networkClient);
+                    NetworkClient = Instantiate(settings.clientPrefab).GetComponent<OpenverseNetworkClient>();
+                    NetworkClient.settings = settings;
+                    NetworkClient.riptideClient.Connected += (object sender, EventArgs e) => IsConnected = true;
+                    NetworkClient.riptideClient.Connected += AudioClient.Instance.Connect;
+                    NetworkClient.riptideClient.Disconnected += (object sender, EventArgs e) => IsConnected = false;
+                    DontDestroyOnLoad(NetworkClient);
                 }
-                if (isConnected) networkClient.Disconnect();
+                if (IsConnected) NetworkClient.Disconnect();
                 AsyncOperation operation = SceneManager.LoadSceneAsync(1);
-                operation.completed += (AsyncOperation o) => networkClient.Connect(homeResponse);
+                operation.completed += (AsyncOperation o) => NetworkClient.Connect(homeResponse);
             } else
             {
                 Debug.LogError("User not logged in!");

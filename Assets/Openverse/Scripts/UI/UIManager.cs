@@ -98,8 +98,7 @@ namespace Openverse.UI
             forward.y = 0;
             alert.panelPosition = OpenverseClient.Instance.player.transform.position + forward * 2f + (OpenverseClient.Instance.player.head.transform.localPosition.y / 2f * Vector3.up);
             alert.lookAtPlayer = true;
-            text.color = new Color(0.03189604f, 0.03189604f, 0.03189604f, 1);
-            button.onClickEvent += () => { alert.Close(); };
+            button.onClickEvent += () => alert.Close();
         }
 
         public void CloseCurrentPanel()

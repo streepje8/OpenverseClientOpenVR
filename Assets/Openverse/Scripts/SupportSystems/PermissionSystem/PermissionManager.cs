@@ -5,7 +5,6 @@
 //Author: streep
 //Creation Date: 12-04-2022
 //--------------------------------
-using System;
 
 namespace Openverse.Permissions
 {

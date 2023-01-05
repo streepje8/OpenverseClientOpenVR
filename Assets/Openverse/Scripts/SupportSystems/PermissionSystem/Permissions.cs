@@ -253,7 +253,7 @@ namespace Openverse.Permissions
         public static bool SetServerPermission(Permission permission, PermissionState state)
         {
             serverPermissions[permission] = state;
-            SaveServerPermissions(OpenverseClient.Instance.currentServer);
+            SaveServerPermissions(OpenverseClient.Instance.CurrentServer);
             return true;
         }
 
@@ -262,7 +262,7 @@ namespace Openverse.Permissions
             LoadServerPermissions(name);
             serverPermissions[permission] = state;
             SaveServerPermissions(name);
-            LoadServerPermissions(OpenverseClient.Instance.currentServer);
+            LoadServerPermissions(OpenverseClient.Instance.CurrentServer);
             return true;
         }
     }

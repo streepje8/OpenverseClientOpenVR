@@ -1,8 +1,5 @@
 namespace Openverse.UI
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
     using TMPro;
     using UnityEngine;
 
@@ -59,6 +56,7 @@ namespace Openverse.UI
             mat = new Material(TMP.material);
             TMP.material = mat;
             TMP.enabled = true;
+            TMP.faceColor = Color.white;
         }
     }
 }

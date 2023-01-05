@@ -11,7 +11,6 @@ namespace Openverse.NetCode
     using RiptideNetworking;
     using System.Collections.Generic;
     using UnityEngine;
-    using static Openverse.NetCode.NetworkingCommunications;
 
     public class OpenversePlayer : MonoBehaviour
     {

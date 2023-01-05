@@ -5,15 +5,16 @@
 //Author: streep
 //Creation Date: 12-04-2022
 //--------------------------------
+
 namespace Openverse.Core
 {
     using Openverse.Input;
     using Openverse.Permissions;
+    using Openverse.NetCode;
     using RiptideNetworking;
     using System;
     using System.Collections.Generic;
     using UnityEngine;
-    using static Openverse.NetCode.NetworkingCommunications;
 
     [RequireComponent(typeof(VirtualPlayer))]
     public class VirtualPlayerInput : MonoBehaviour
@@ -76,7 +77,7 @@ namespace Openverse.Core
             {4, typeof(Quaternion)}
         };
 
-        [MessageHandler((ushort)ServerToClientId.RequestInput)]
+        [MessageHandler((ushort)ServerToClientId.requestInput)]
         private static void OnInputRequest(Message message)
         {
             OpenverseClient.Instance?.player?.input?.OnRequestInput(message);
