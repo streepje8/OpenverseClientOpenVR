@@ -10,11 +10,9 @@ public class AudioSourceStream : MonoBehaviour
 {
     public float audioBufferSize = 0.5f;
     public int bufferSize = 1000;
-    public int currentlyBuffered = 0;
     public int channels = 2;
     public int sampleRate = 44100;
     public int position = 0;
-    public float frequency = 440;
 
     public int CurrentStreamingIndex { get; private set; } = 0;
     private AudioSource source;
@@ -64,11 +62,12 @@ public class AudioSourceStream : MonoBehaviour
                     
                 }
                 float[] samples = new float[dat.Length / 4];
-                System.Buffer.BlockCopy(dat, 0, samples, 0, dat.Length);
+                System.Buffer.BlockCopy(dat, 0, samples, 0, System.Buffer.ByteLength(dat));
                 sampleBuffer = sampleBuffer.Concat(samples).ToArray();
                 processingBuffer = new List<byte[]>();
                 if(!source.isPlaying) source.Play();
             }
+            dataBuffer.Remove(CurrentStreamingIndex);
             CurrentStreamingIndex++;
         }
         else
@@ -77,21 +76,39 @@ public class AudioSourceStream : MonoBehaviour
         }
         if (timeSpendWaiting > 0.1f)
         {
-            Debug.Log("A streaming index timed out! Skipping it!");
             CurrentStreamingIndex++;
             timeSpendWaiting = 0f;
         }
     }
 
+    private int lastPosition = 0;
+    
     void OnAudioRead(float[] data)
     {
         int count = 0;
-        while (count < data.Length)
+        if (sampleBuffer.Length >= data.Length)
         {
-            data[count] = sampleBuffer[position]; //Mathf.Sin(2 * Mathf.PI * frequency * position / sampleRate)
-            position++;
-            count++;
+            while (count < data.Length)
+            {
+                data[count] = sampleBuffer[position - lastPosition]; //Mathf.Sin(2 * Mathf.PI * frequency * position / sampleRate)
+                position++;
+                count++;
+            }
+            if (sampleBuffer.Length > audioBufferSize * sampleRate)
+            {
+                sampleBuffer = Array.Empty<float>();
+                lastPosition = position;
+            }
         }
+        else
+        {
+            while (count < data.Length)
+            {
+                data[count] = 0; //Mathf.Sin(2 * Mathf.PI * frequency * position / sampleRate)
+                count++;
+            } 
+        }
+        
     }
 
     void OnAudioSetPosition(int newPosition)
