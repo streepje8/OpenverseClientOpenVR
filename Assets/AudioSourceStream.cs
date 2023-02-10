@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Openverse.Audio;
 using UnityEngine;
@@ -22,7 +23,7 @@ public class AudioSourceStream : MonoBehaviour
     private float timeSpendWaiting = 0f;
     private List<byte[]> processingBuffer = new List<byte[]>();
     private float[] sampleBuffer = Array.Empty<float>();
-    
+
     private void Awake()
     {
         source = GetComponent<AudioSource>();
@@ -74,17 +75,18 @@ public class AudioSourceStream : MonoBehaviour
         {
             timeSpendWaiting += Time.deltaTime;
         }
-        if (timeSpendWaiting > 0.1f)
+        if (timeSpendWaiting > 60f)
         {
             CurrentStreamingIndex++;
             timeSpendWaiting = 0f;
         }
     }
 
-    private int lastPosition = 0;
-    
     void OnAudioRead(float[] data)
     {
+        sampleBuffer.Take(data.Length).ToArray().CopyTo(data,0);
+        sampleBuffer = sampleBuffer.Skip(data.Length).ToArray();
+        /*
         int count = 0;
         if (sampleBuffer.Length >= data.Length)
         {
@@ -108,7 +110,7 @@ public class AudioSourceStream : MonoBehaviour
                 count++;
             } 
         }
-        
+        */
     }
 
     void OnAudioSetPosition(int newPosition)

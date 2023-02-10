@@ -141,9 +141,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioBufferSize: 0.5
-  bufferSize: 1
-  currentlyBuffered: 0
+  bufferSize: 5
   channels: 1
-  sampleRate: 11025
+  sampleRate: 22050
   position: 0
-  frequency: 440
