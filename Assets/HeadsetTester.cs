@@ -78,8 +78,8 @@ public class HeadsetTester : MonoBehaviour
             Debug.Log("Ok! If you are still holding enter, please release the key.");
             while (keyboard.Get<bool>("enter")) await Task.Delay(100);
             Debug.Log("Im sending a vibration to both controllers, if nothing happens press enter. Otherwise press Q");
-            leftController.SendHaptics(new HapticOutput(10f, 100f));
-            rightController.SendHaptics(new HapticOutput(10f, 100f));
+            leftController.SendHaptics(new HapticOutput(1f, 0.8f));
+            rightController.SendHaptics(new HapticOutput(1f, 0.8f));
             gotInput = false;
             while (!gotInput)
             {
