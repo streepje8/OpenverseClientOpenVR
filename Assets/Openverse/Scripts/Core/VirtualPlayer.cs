@@ -28,6 +28,7 @@ namespace Openverse.Core
         {
             DontDestroyOnLoad(this.gameObject);
             input = GetComponent<VirtualPlayerInput>();
+            if (OpenverseClient.Instance == null) enabled = false;
         }
 
         private void FixedUpdate()

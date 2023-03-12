@@ -17,6 +17,7 @@ namespace Openverse.UI
             OpenverseInput.AddDeviceConnectionHandler(onDeviceConnect);
             linerenderer = GetComponent<LineRenderer>();
             linerenderer.enabled = false;
+            if (UIManager.Instance == null) enabled = false;
         }
 
         public void onDeviceConnect(OpenverseDevice device)
